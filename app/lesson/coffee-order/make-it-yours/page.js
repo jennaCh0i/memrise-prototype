@@ -1,123 +1,36 @@
 "use client";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import Icon from "@/components/Icons";
-import { useApp } from "@/components/AppState";
-import { translate, orderLine, SUGGESTIONS } from "@/lib/menu";
+import { useState } from "react";
+import { Screen, T, BackLink, TextField, Pill, ChoiceTile, Button } from "@/components/ui";
 
-// Lesson / 02 · Make it yours — type (or say) your drink, see it in Korean live.
-const WHO = [
-  { id: "me", label: "Just me" },
-  { id: "friend", label: "A friend" },
-  { id: "older", label: "Someone older" },
-  { id: "group", label: "Ordering for a group" },
-];
+// Lesson / 02 · Make it yours
+const SUGGESTIONS = [["아아", "iced americano"], ["라떼", "latte"], ["따아", "hot americano"], ["바닐라 라떼", "vanilla latte"]];
+const WHO = [[24, 473, "Just me"], [214, 473, "A friend"], [24, 545, "Someone older"], [214, 545, "Ordering for a group"]];
 
 export default function MakeItYours() {
   const router = useRouter();
-  const app = useApp();
-  const [drink, setDrink] = useState("");
-  const [who, setWho] = useState("me");
-  const [listening, setListening] = useState(false);
-  const [voiceNote, setVoiceNote] = useState("");
-  const recRef = useRef(null);
-
-  useEffect(() => { setDrink(app.drink || ""); setWho(app.who || "me"); }, [app.drink, app.who]);
-
-  const t = translate(drink);
-  const line = orderLine(t, who);
-
-  function listen() {
-    const SR = typeof window !== "undefined" && (window.SpeechRecognition || window.webkitSpeechRecognition);
-    if (!SR) { setVoiceNote("Voice works in Chrome — type it for now."); return; }
-    if (listening) { recRef.current?.stop(); return; }
-    const rec = new SR();
-    rec.lang = "en-US"; rec.interimResults = true; rec.maxAlternatives = 1;
-    rec.onresult = (e) => setDrink(Array.from(e.results).map((r) => r[0].transcript).join(" "));
-    rec.onend = () => setListening(false);
-    rec.onerror = () => { setListening(false); setVoiceNote("Couldn’t hear that — try again or type it."); };
-    recRef.current = rec; setVoiceNote(""); setListening(true); rec.start();
-  }
-
-  function build() {
-    app.update({ drink: drink.trim(), who });
-    router.push("/lesson/coffee-order");
-  }
-
+  const [drink, setDrink] = useState("vanilla oat latte");
+  const [who, setWho] = useState("Just me");
   return (
-    <div className="screen">
-      <div className="pad top-space">
-        <Link href="/" className="back"><Icon name="back" size={20} /> back</Link>
+    <Screen bg="#f3f4ef">
+      <BackLink x={24} y={66} href="/" />
+      <T x={24} y={114} font="dm" size={11} weight={600} ls="0.06em" lh={14} color="var(--plum)">DAY 13 · COFFEE ORDER</T>
+      <T x={24} y={136} font="serif" size={34} lh="110%">Make it your order</T>
 
-        <div style={{ marginTop: 24 }}>
-          <div className="t-caps brand">Day 13 · coffee order</div>
-          <h1 className="t-heading-l" style={{ marginTop: 8 }}>Make it your order</h1>
-          <p className="t-body muted" style={{ marginTop: 8 }}>We’ll rebuild the scene around what you actually drink and who you’re with.</p>
-        </div>
-
-        {/* drink */}
-        <div style={{ marginTop: 24 }}>
-          <label htmlFor="drink" className="t-body-strong">What do you usually order?</label>
-          <div className={`field ${drink ? "filled" : ""}`} style={{ marginTop: 8 }}>
-            <input id="drink" value={drink} onChange={(e) => setDrink(e.target.value)}
-              placeholder="Type or say your drink" autoComplete="off" enterKeyHint="done" />
-            <button className="round round-brand" onClick={listen} aria-label={listening ? "Stop listening" : "Say your drink"}
-              style={{ width: 40, height: 40, background: listening ? "var(--tomato)" : undefined, animation: listening ? "pulse 1.2s infinite" : "none" }}>
-              <Icon name="mic" size={20} />
-            </button>
-          </div>
-          {voiceNote && <p className="t-small muted" style={{ marginTop: 6 }}>{voiceNote}</p>}
-
-          {t && line && (
-            <div className="rise" key={t.ko} style={{ marginTop: 8, background: "var(--yellow)", borderRadius: "var(--radius-md)", padding: 16, color: "var(--plum)" }}>
-              <div className="t-caps" style={{ opacity: .75 }}>At the counter you say</div>
-              <div className="t-ko-m" style={{ marginTop: 4 }}>{t.ko}</div>
-              <div className="t-small" style={{ opacity: .75 }}>{t.rom}</div>
-              {t.slang && <div className="t-small" style={{ marginTop: 6 }}>Locals just say <b className="t-ko" style={{ fontSize: 14 }}>{t.slang}</b></div>}
-              <div style={{ marginTop: 10, background: "var(--paper)", borderRadius: "var(--radius-sm)", padding: "8px 12px" }}>
-                <div className="t-ko" style={{ fontSize: 15 }}>{line.ko}</div>
-                <div className="t-small" style={{ opacity: .7 }}>{line.rom}</div>
-              </div>
-              {t.unknown.length > 0 && (
-                <div className="t-small" style={{ marginTop: 8, opacity: .75 }}>
-                  We’ll learn “{t.unknown.join(" ")}” together in the scene.
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="t-small muted" style={{ marginTop: 14 }}>Popular at Seoul cafés</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
-            {SUGGESTIONS.map((s) => (
-              <button key={s.value} className={`pill ${drink.trim().toLowerCase() === s.value ? "on" : ""}`} onClick={() => setDrink(s.value)}>
-                <span className="ko">{s.ko}</span><span className="en">{s.en}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* who */}
-        <div style={{ marginTop: 28 }}>
-          <div className="t-body-strong">Who’s with you?</div>
-          <div className="grid-2" style={{ marginTop: 8 }} role="radiogroup">
-            {WHO.map((w) => (
-              <button key={w.id} role="radio" aria-checked={who === w.id} className={`tile ${who === w.id ? "on" : ""}`} onClick={() => setWho(w.id)}>
-                {w.label}
-              </button>
-            ))}
-          </div>
-          <p className="t-small muted" style={{ marginTop: 8 }}>
-            {who === "older"
-              ? "Got it — your lines switch to the extra-polite 주시겠어요?"
-              : "Someone older (a boss, in-laws) switches your lines to extra-polite Korean."}
-          </p>
-        </div>
+      <T x={24} y={195} font="dm" size={15} weight={500} lh={20}>What do you usually order?</T>
+      <TextField x={24} y={223} value={drink} onChange={setDrink} placeholder="Type or say your drink" filled={!!drink} />
+      <T x={24} y={291} font="dm" size={13} lh={17} color="var(--ash)">Popular at Seoul cafés</T>
+      <div style={{ position: "absolute", left: 24, top: 316, width: 372, display: "flex", flexWrap: "wrap", gap: "12px 8px" }}>
+        {SUGGESTIONS.map(([ko, en]) => <Pill key={en} ko={ko} en={en} on={drink.trim().toLowerCase() === en} onClick={() => setDrink(en)} />)}
       </div>
 
-      <div style={{ position: "sticky", bottom: 0, marginTop: 24, padding: "16px 24px 28px", background: "linear-gradient(180deg, rgba(243,244,239,0), var(--cream) 30%)" }}>
-        <button className="btn btn-dark" disabled={!drink.trim()} onClick={build}>Build my scene</button>
+      <T x={24} y={445} font="dm" size={15} weight={500} lh={20}>Who's with you?</T>
+      <div role="radiogroup">
+        {WHO.map(([x, y, l]) => <ChoiceTile key={l} x={x} y={y} label={l} on={who === l} onClick={() => setWho(l)} />)}
       </div>
-    </div>
+      <T x={24} y={617} w={372} font="dm" size={13} lh={17} color="var(--ash)">Someone older (a boss, in-laws) switches your lines to polite 합니다체.</T>
+
+      <Button x={24} y={820} label="Build my scene" disabled={!drink.trim()} onClick={() => router.push("/lesson/coffee-order")} />
+    </Screen>
   );
 }

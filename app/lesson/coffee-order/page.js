@@ -1,84 +1,50 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import Icon from "@/components/Icons";
-import { useApp } from "@/components/AppState";
-import { translate, orderLine } from "@/lib/menu";
+import { Screen, Box, T, Photo, Button } from "@/components/ui";
 
-// Lesson / 02 · Situation detail — now built around the learner's own order.
+// Lesson / 02 · Situation detail
 const SCENES = [
-  { n: 1, title: "Meet the barista", state: "done", color: "var(--periwinkle)" },
-  { n: 2, title: "Order a drink", state: "today", color: "var(--lilac)" },
-  { n: 3, title: "“For here or to go?”", state: "next", color: "var(--yellow)" },
-  { n: 4, title: "Pay and say thanks", state: "locked", color: "var(--tomato)" },
-  { n: 5, title: "Fix a wrong order", state: "locked", color: "var(--plum)" },
+  ["Meet the barista", "✓ done", "#b1c2fa"],
+  ["Order a drink", "today", "#e1b3e3"],
+  ["“For here or to go?”", "next", "#ffcf00"],
+  ["Pay and say thanks", "locked", "#ef6b4d"],
+  ["Fix a wrong order", "locked", "#430b27"],
 ];
 
 export default function SituationDetail() {
-  const { drink, who } = useApp();
   const [toast, setToast] = useState(false);
-  const t = translate(drink || "iced americano");
-  const line = orderLine(t, who);
-  const formal = who === "older";
-
   return (
-    <div className="screen">
-      <section className="photo" style={{ "--img": "url(/images/barista.jpg)", height: 300, position: "relative" }}>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(243,244,239,0) 40%, var(--cream) 100%)" }} />
-        <Link href="/lesson/coffee-order/make-it-yours" className="back" style={{ position: "absolute", top: 64, left: 24, color: "var(--paper)" }}>
-          <Icon name="back" size={20} /> back
-        </Link>
-      </section>
+    <Screen bg="#f3f4ef">
+      <Photo x={-48} y={-60} w={516} h={774} src="/images/barista.jpg" />
+      <Box x={0} y={240} w={420} h={180} style={{ background: "linear-gradient(180deg, rgba(243,244,239,0) 0%, #f3f4ef 100%)" }} />
+      <Box x={0} y={416} w={420} h={502} bg="#f3f4ef" />
+      <Link href="/lesson/coffee-order/make-it-yours"><T x={24} y={72} font="dm" size={15} lh={20} color="var(--paper)">←  back</T></Link>
 
-      <div className="pad" style={{ marginTop: -56, position: "relative" }}>
-        <div className="t-caps brand">Day 13 · Seoul in 18 days</div>
-        <h1 className="t-display" style={{ marginTop: 6 }}>coffee order</h1>
-        <p className="t-small muted" style={{ marginTop: 8 }}>
-          5 scenes · about 6 min each · {formal ? "extra-polite 주시겠어요" : "polite 해요체"}
-        </p>
+      <T x={24} y={330} font="dm" size={11} weight={600} lh={14} color="var(--plum)">DAY 13  ·  SEOUL IN 18 DAYS</T>
+      <T x={24} y={348} font="serif" size={48} lh={48} color="#1f1d1c">coffee order</T>
+      <T x={24} y={408} font="ko" size={13} weight={500} lh={16} color="#8a857e">5 scenes · about 6 min each · polite 해요체</T>
 
-        <div className="rise" style={{ marginTop: 16, background: "var(--yellow)", color: "var(--plum)", borderRadius: "var(--radius-md)", padding: "14px 16px", display: "flex", gap: 12, alignItems: "center" }}>
-          <div style={{ flex: 1 }}>
-            <div className="t-caps" style={{ opacity: .75 }}>Your order in this scene</div>
-            <div className="t-ko" style={{ fontSize: 18, marginTop: 4 }}>{line.ko}</div>
-            <div className="t-small" style={{ opacity: .75 }}>{line.rom}</div>
+      {SCENES.map(([title, status, c], i) => {
+        const y = 448 + i * 66, today = i === 1, locked = status === "locked";
+        return (
+          <div key={title}>
+            <Box x={24} y={y} w={372} h={56} r={16} bg={today ? "#fefff8" : "#f3f4ef"} />
+            <Box x={38} y={y + 14} w={6} h={28} r={3} bg={c} />
+            <T x={58} y={y + 17} font="serif" size={18} lh={22} color="#8a857e">{String(i + 1)}</T>
+            <T x={82} y={y + 18} font="dm" size={15} weight={500} lh={20} color={locked ? "#8a857e" : "#1f1d1c"}>{title}</T>
+            <T x={316} y={y + 20} w={64} font="dm" size={12} weight={500} lh={16} align="right" color={today ? "var(--plum)" : "#8a857e"}>{status}</T>
           </div>
-          <Link href="/lesson/coffee-order/make-it-yours" className="t-small" style={{ textDecoration: "underline" }}>change</Link>
+        );
+      })}
+      <T x={24} y={782} w={372} font="dm" size={12} lh={16} align="center" color="#8a857e">Watch locals → rehearse with a local → ready</T>
+
+      {toast && (
+        <div className="rise" role="status" style={{ position: "absolute", left: 24, top: 744, width: 372, background: "var(--plum)", color: "var(--paper)", borderRadius: 16, padding: "12px 16px", zIndex: 2 }}>
+          <T font="dm" size={15} weight={500} color="var(--paper)">Scene 2 is next in the prototype ☕</T>
         </div>
-
-        <ol style={{ listStyle: "none", marginTop: 16, display: "grid", gap: 8 }}>
-          {SCENES.map((s) => {
-            const today = s.state === "today";
-            const title = s.n === 2 ? `Order ${drink ? (t.slang || t.ko) : "a drink"}` : s.title;
-            return (
-              <li key={s.n} style={{
-                height: 64, borderRadius: "var(--radius-md)", display: "flex", alignItems: "center", gap: 14, padding: "0 16px",
-                background: today ? "var(--white)" : "transparent",
-                boxShadow: today ? "0 1px 0 rgba(0,0,0,.03)" : "none",
-                opacity: s.state === "locked" ? .5 : 1,
-              }}>
-                <span style={{ width: 4, height: 28, borderRadius: 2, background: s.color }} />
-                <span className="t-heading-s muted" style={{ width: 14 }}>{s.n}</span>
-                <span className="t-body-strong" style={{ flex: 1, fontFamily: s.n === 2 && drink ? "var(--font-sans), var(--font-ko)" : undefined }}>{title}</span>
-                <span className="t-small" style={{ color: today ? "var(--plum)" : "var(--ash)", fontWeight: today ? 600 : 400 }}>
-                  {s.state === "done" ? "✓ done" : s.state === "today" ? "today" : s.state === "next" ? "next" : <Icon name="lock" size={14} />}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="t-small muted" style={{ textAlign: "center", marginTop: 12 }}>Watch locals → rehearse with a local → ready</p>
-      </div>
-
-      <div style={{ position: "sticky", bottom: 0, marginTop: 24, padding: "16px 24px 28px", background: "linear-gradient(180deg, rgba(243,244,239,0), var(--cream) 30%)" }}>
-        {toast && (
-          <div className="rise" role="status" style={{ marginBottom: 12, background: "var(--plum)", color: "var(--paper)", borderRadius: "var(--radius-md)", padding: "12px 16px" }}>
-            <div className="t-body-strong">Scene 2 is next in the prototype ☕</div>
-            <div className="t-small" style={{ opacity: .8 }}>You’ll practise “{line.ko}” with the barista.</div>
-          </div>
-        )}
-        <button className="btn btn-dark" onClick={() => { setToast(true); setTimeout(() => setToast(false), 2600); }}>Start scene 2</button>
-      </div>
-    </div>
+      )}
+      <Button x={24} y={814} label="Start scene 2" onClick={() => { setToast(true); setTimeout(() => setToast(false), 2400); }} />
+    </Screen>
   );
 }

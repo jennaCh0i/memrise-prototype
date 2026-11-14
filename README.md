@@ -4,11 +4,10 @@ A phone-sized web prototype of the Memrise rebrand (Jenna Choi, ArtCenter).
 Design source: Figma `JennaChoi_CD5-VXD` → page **week9** and **🧩 Components**.
 
 ## What works
-- **Lessons** — Lesson 01 · Today → **Make it yours** (type or say your drink, see it in Korean live, pick who you're with) → Situation detail rebuilt around your order.
-- **Flash cards** — deck grid → *coffee order* stack: tap to flip, Again / Got it. Your drink from the lesson becomes the "your usual" card.
-- **Play** — live room entry, word games, practice together.
-- **Community** — feed → **live room**: topic card, upvotable questions, raise hand, mic, chat with quick-help phrases and *suggest a fix*.
-- **Home** — streak, dates, today's lesson, review.
+Every screen is laid out 1:1 from the Figma week9 frames (420 × 912 units, zoomed to the device), using the SVG shapes exported from Figma (speech bubbles, hero curves, wordmark, Nav_New icons).
+- **Home**, **Lessons** (Tab / Lessons → Make it yours → Situation detail)
+- **Flash cards** → *coffee order* stack (tap the card to flip, tap a menu word to bring it to the front)
+- **Community** with a **Talk / Play** switch → **Korean speaking room** (next topic, upvotes, ask a question, raise hand, mic, chat with quick help + suggest a fix)
 
 ## Photos
 Photo slots show a warm placeholder until images exist. Add these to `public/images/`:
@@ -16,8 +15,7 @@ Photo slots show a warm placeholder until images exist. Add these to `public/ima
 | file | what |
 |---|---|
 | `barista.jpg` | the café barista photo (lesson hero) |
-| `me.jpg` | your avatar |
-| `jisoo.jpg`, `mina.jpg`, `leo.jpg` | community avatars |
+| `av-37e486.jpg`, `av-db155a.jpg`, `av-8d5254.jpg` | avatars (missing ones show as a plain circle) |
 
 On GitHub: open `public/images` → **Add file → Upload files** → commit. Vercel redeploys automatically.
 

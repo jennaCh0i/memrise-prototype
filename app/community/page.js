@@ -1,44 +1,44 @@
 import Link from "next/link";
-import Header from "@/components/Header";
-import TabBar from "@/components/TabBar";
-import Avatar from "@/components/Avatar";
+import { Screen, Box, T, Avatar, ME, P2, P3, Button, Segmented } from "@/components/ui";
+import { Svg, LIVE_BUBBLE, Wordmark } from "@/components/Shapes";
+import Icon from "@/components/Icons";
 
-// Community / 01 · Feed
-const QUESTIONS = [
-  { who: "Mina · Korean, day 30", img: "mina", init: "MN", q: "How do I politely say no to more food at a family dinner?", meta: "8 answers · native speaker answered" },
-  { who: "Leo · French, day 12", img: "leo", init: "LO", q: "Is “tu” okay with a café barista, or too casual?", meta: "3 answers" },
+// Tab / Community (Talk)
+const QS = [
+  { y: 480, av: P2, who: "Mina · Korean, day 30", q: "How do I politely say no to more food at a family dinner?", meta: "8 answers · native speaker answered" },
+  { y: 630, av: P3, who: "Leo · French, day 12", q: "Is “tu” okay with a café barista, or too casual?", meta: "3 answers" },
 ];
 
 export default function Community() {
   return (
-    <>
-      <div className="screen">
-        <Header title="Community" />
-        <div className="pad" style={{ marginTop: 20 }}>
-          <div className="bubble" style={{ "--c": "var(--khaki)", padding: 20 }}>
-            <div className="t-small"><span style={{ color: "var(--plum)" }}>●</span> Live now</div>
-            <div className="t-heading-m" style={{ marginTop: 4 }}>Korean speaking room</div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14 }}>
-              <span className="t-small muted">13 learners · all levels</span>
-              <Link href="/community/live" className="btn btn-brand btn-sm">Join</Link>
-            </div>
-          </div>
+    <Screen bg="#f7f6f2" nav="Community">
+      <Wordmark />
+      <Avatar x={348} y={90} size={49} src={ME} />
+      <T x={24} y={150} font="serif" size={40} lh={40} color="#1f1d1c">Community</T>
+      <Segmented x={264} y={152} value="Talk" />
 
-          <div className="t-small muted" style={{ marginTop: 44 }}>Questions</div>
-          {QUESTIONS.map((q) => (
-            <div key={q.q} style={{ padding: "16px 0", borderBottom: "1px solid var(--stone)" }}>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <Avatar src={`/images/${q.img}.jpg`} initials={q.init} size={28} color="var(--khaki)" />
-                <span className="t-small muted">{q.who}</span>
-              </div>
-              <div className="t-title" style={{ marginTop: 8 }}>{q.q}</div>
-              <div className="t-small muted" style={{ marginTop: 6 }}>{q.meta}</div>
-            </div>
-          ))}
-          <div style={{ height: 32 }} />
+      <Svg x={22} y={226} w={376} h={198} d={LIVE_BUBBLE} fill="#DDD9C9" />
+      <Box x={44} y={251} w={8} h={8} r={4} bg="var(--plum)" />
+      <T x={58} y={245} font="inter" size={13} weight={500} lh={16} color="var(--plum)">Live now</T>
+      <T x={44} y={268} font="serif" size={26} lh={26} color="#1f1d1c">Korean speaking room</T>
+      {[ME, P2, P3].map((s, i) => <Avatar key={i} x={44 + i * 22} y={326} size={34} src={s} />)}
+      <T x={134} y={334} font="inter" size={14} lh={17} color="#8a857e">13 learners</T>
+      <Button x={273} y={323} small kind="brand" label="Join" href="/community/live" />
+
+      <T x={24} y={450} font="inter" size={13} weight={500} lh={16} color="#8a857e">Questions</T>
+      {QS.map((q) => (
+        <div key={q.y}>
+          <Avatar x={24} y={q.y} size={32} src={q.av} />
+          <T x={66} y={q.y + 8} font="inter" size={13} lh={16} color="#8a857e">{q.who}</T>
+          <T x={24} y={q.y + 46} w={372} font="inter" size={17} weight={500} lh="135%" color="#1f1d1c">{q.q}</T>
+          <T x={24} y={q.y + 104} font="inter" size={13} lh={16} color="#8a857e">{q.meta}</T>
+          <Box x={24} y={q.y + 136} w={372} h={1} bg="#e8e5de" />
         </div>
-      </div>
-      <TabBar />
-    </>
+      ))}
+      <Link href="/community/live" aria-label="Ask a question" className="press"
+        style={{ position: "absolute", left: 336, top: 748, width: 60, height: 60, borderRadius: 30, background: "var(--plum)", color: "var(--paper)", display: "grid", placeItems: "center" }}>
+        <Icon name="plus" size={26} />
+      </Link>
+    </Screen>
   );
 }

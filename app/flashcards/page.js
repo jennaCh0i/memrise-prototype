@@ -1,40 +1,31 @@
 import Link from "next/link";
-import Header from "@/components/Header";
-import TabBar from "@/components/TabBar";
+import { Screen, Box, T, Avatar, ME, DeckBubble } from "@/components/ui";
+import { Wordmark } from "@/components/Shapes";
 
-// Flash cards / 01 · Decks — speech-bubble deck cards.
+// Tab / Flash cards
 const DECKS = [
-  { slug: "coffee-order", title: "coffee order", count: 8, c: "var(--yellow)" },
-  { title: "takeout", count: 12, c: "var(--lilac)" },
-  { title: "T-money", count: 5, c: "var(--periwinkle)" },
-  { title: "pharmacy", count: null, c: "var(--khaki)" },
-  { title: "airport", count: 4, c: "#ef6b4d" },
-  { title: "dinner", count: null, c: "#fbd85c" },
+  { x: 22, y: 318, c: "#ffcf00", t: "coffee\norder", n: "8", href: "/flashcards/coffee-order" },
+  { x: 214, y: 318, c: "#e1b3e3", t: "takeout", n: "6" },
+  { x: 22, y: 494, c: "#b1c2fa", t: "T-money", n: "5" },
+  { x: 214, y: 494, c: "#bdb596", t: "pharmacy", op: 0.45 },
+  { x: 22, y: 670, c: "#ef6b4d", t: "airport", n: "4" },
+  { x: 214, y: 670, c: "#ffcf00", t: "dinner", op: 0.6 },
 ];
 
-export default function Decks() {
+export default function FlashCards() {
   return (
-    <>
-      <div className="screen">
-        <Header title="flash cards">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 6 }}>
-            <span className="brand" style={{ fontFamily: "var(--font-serif)", fontSize: 20 }}><span style={{ fontSize: 26 }}>12</span> due today</span>
-            <span className="t-small">saved 24 →</span>
-          </div>
-        </Header>
-        <div className="pad" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px 10px", marginTop: 28, paddingBottom: 48 }}>
-          {DECKS.map((d) => {
-            const card = (
-              <div className="bubble" style={{ "--c": d.c, height: 140, padding: 18, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <span className="t-heading-m">{d.title}</span>
-                {d.count && <span style={{ fontFamily: "var(--font-serif)", fontSize: 44, alignSelf: "flex-end", lineHeight: 1 }}>{d.count}</span>}
-              </div>
-            );
-            return d.slug ? <Link key={d.title} href={`/flashcards/${d.slug}`}>{card}</Link> : <div key={d.title} style={{ opacity: .92 }}>{card}</div>;
-          })}
-        </div>
-      </div>
-      <TabBar />
-    </>
+    <Screen bg="#f7f6f2" nav="Flash cards">
+      <Wordmark />
+      <Avatar x={348} y={90} size={49} src={ME} />
+      <T x={26} y={150} font="serif" size={44} lh={44}>flash cards</T>
+      <T x={315} y={166} font="dm" size={14} weight={500} lh={18} color="var(--plum)">saved  24  →</T>
+      <Link href="/flashcards/coffee-order" className="press">
+        <Box x={22} y={222} w={376} h={68} r={34} bg="var(--yellow)" />
+        <T x={46} y={240} font="serif" size={26} lh={26} color="var(--plum)">12 due today</T>
+        <Box x={326} y={232} w={48} h={48} r={24} bg="var(--plum)" />
+        <T x={326} y={240} w={48} font="inter" size={22} weight={500} lh={27} align="center" color="var(--paper)">→</T>
+      </Link>
+      {DECKS.map((d) => <DeckBubble key={d.t} x={d.x} y={d.y} color={d.c} title={d.t} count={d.n} opacity={d.op} href={d.href} />)}
+    </Screen>
   );
 }
