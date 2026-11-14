@@ -1,6 +1,25 @@
 /* Memrise rebrand — week 9 prototype
    Tokens mirror the Figma "WK04 Palette" + "WK09 Tokens" collections. */
 
+/* Brand type: FAIRE Octave for serif text, Columba Text for numbers.
+   "Columba Numerals" only covers digits, so numbers inside any serif text switch to Columba automatically. */
+@font-face {
+  font-family: "Columba Numerals";
+  src: url("/fonts/ColumbaText-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0030-0039;
+}
+@font-face {
+  font-family: "FAIRE Octave";
+  src: url("/fonts/FaireOctave-Regular.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "FAIRE Octave";
+  src: url("/fonts/FaireOctave-Italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+
 :root {
   /* primitives */
   --plum: #430b27;
@@ -50,7 +69,7 @@
   --spacing-md: 16px;
   --spacing-lg: 24px;
 
-  --font-serif: "Newsreader", Georgia, serif;
+  --font-serif: "Columba Numerals", "FAIRE Octave", "Newsreader", Georgia, serif;
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
   --font-ko: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
 }
