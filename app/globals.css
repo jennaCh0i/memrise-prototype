@@ -200,7 +200,7 @@ input { font: inherit; color: inherit; }
 .photo {
   background-color: #b49e88;
   background-image: var(--img), linear-gradient(160deg, #d8c3ab 0%, #9b7d66 55%, #5e4335 100%);
-  background-size: cover; background-position: center;
+  background-size: cover; background-position: center 28%;
 }
 
 /* ---------- tab bar (Nav_New) ---------- */
