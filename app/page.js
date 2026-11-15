@@ -7,19 +7,24 @@ import { Svg, LESSON_CURVE } from "@/components/Shapes";
 // Tab / Lessons
 // Tiles are 106×106, 120 apart (from Figma). The strip scrolls sideways and
 // opens with today's lesson (day 13) at x 79, exactly where the Figma frame has it.
+// Days count down (D-day until the trip), so they descend left → right.
 const LESSONS = [
-  { day: 9, title: "subway\nride" },
-  { day: 10, title: "convenience\nstore" },
-  { day: 11, title: "takeout" },
-  { day: 12, title: "airport\ncheck-in" },
+  { day: 17, title: "subway\nride" },
+  { day: 16, title: "convenience\nstore" },
+  { day: 15, title: "takeout" },
+  { day: 14, title: "airport\ncheck-in" },
   { day: 13, title: "coffee\norder", today: true, href: "/lesson/coffee-order/make-it-yours" },
-  { day: 14, title: "T-money\ntop-up" },
-  { day: 15, title: "pharmacy" },
-  { day: 16, title: "dinner with\nfriends" },
-  { day: 17, title: "hair\nsalon" },
-  { day: 18, title: "phone\nplan" },
-  { day: 19, title: "doctor's\nvisit" },
-  { day: 20, title: "apartment\nviewing" },
+  { day: 12, title: "T-money\ntop-up" },
+  { day: 11, title: "pharmacy" },
+  { day: 10, title: "dinner with\nfriends" },
+  { day: 9, title: "hair\nsalon" },
+  { day: 8, title: "phone\nplan" },
+  { day: 7, title: "doctor's\nvisit" },
+  { day: 6, title: "street\nfood" },
+  { day: 5, title: "taxi\nride" },
+  { day: 4, title: "museum\ntickets" },
+  { day: 3, title: "hotel\ncheck-in" },
+  { day: 2, title: "asking for\ndirections" },
 ];
 const PAD = 26;
 const STEP = 120;
