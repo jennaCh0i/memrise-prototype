@@ -3,28 +3,15 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { Screen, Box, T, Photo } from "@/components/ui";
 import { Svg, LESSON_CURVE } from "@/components/Shapes";
+import { LESSONS as BASE, TODAY } from "@/lib/lessons";
 
 // Tab / Lessons
 // Tiles are 106×106, 120 apart (from Figma). The strip scrolls sideways and
 // opens with today's lesson (day 13) at x 79, exactly where the Figma frame has it.
-// Days count down (D-day until the trip), so they descend left → right.
+// Days count down (D-day until the trip), so they descend left → right, ending on day 0.
 const LESSONS = [
-  { day: 17, title: "subway\nride" },
-  { day: 16, title: "convenience\nstore" },
-  { day: 15, title: "takeout" },
-  { day: 14, title: "airport\ncheck-in" },
-  { day: 13, title: "coffee\norder", today: true, href: "/lesson/coffee-order/make-it-yours" },
-  { day: 12, title: "T-money\ntop-up" },
-  { day: 11, title: "pharmacy" },
-  { day: 10, title: "dinner with\nfriends" },
-  { day: 9, title: "hair\nsalon" },
-  { day: 8, title: "phone\nplan" },
-  { day: 7, title: "doctor's\nvisit" },
-  { day: 6, title: "street\nfood" },
-  { day: 5, title: "taxi\nride" },
-  { day: 4, title: "museum\ntickets" },
-  { day: 3, title: "hotel\ncheck-in" },
-  { day: 2, title: "asking for\ndirections" },
+  ...BASE.map((l) => (l.day === TODAY ? { ...l, today: true, href: "/lesson/coffee-order/make-it-yours" } : l)),
+  { day: 0, title: "the big recap", special: true, href: "/lesson/day-0" },
 ];
 const PAD = 26;
 const STEP = 120;
@@ -45,12 +32,21 @@ export default function Lessons() {
       <T x={26} y={437} font="columba" size={50} lh="140%" color="var(--paper)">coffee order</T>
 
       <div ref={strip} className="hscroll" style={{ position: "absolute", left: 0, top: 651, width: 420, height: 106 }}>
-        <div style={{ position: "relative", width: PAD * 2 + (LESSONS.length - 1) * STEP + 106, height: 106 }}>
+        <div style={{ position: "relative", width: PAD * 2 + (LESSONS.length - 1) * STEP + 226, height: 106 }}>
           {LESSONS.map((l, i) => {
             const x = PAD + i * STEP;
             const bg = l.today ? "var(--yellow)" : "var(--plum)";
             const fg = l.today ? "var(--plum)" : "var(--paper)";
-            const tile = (
+            const tile = l.special ? (
+              <>
+                <Box x={x} y={0} w={226} h={106} r={20} bg="var(--periwinkle)" style={{ boxShadow: "inset 0 0 0 2px var(--plum)" }} />
+                <T x={x + 14} y={11} w={200} font="serif" size={22} lh={22} color="var(--plum)">the big recap</T>
+                <T x={x + 14} y={37} w={160} font="dm" size={12} lh={16} color="var(--plum)">every lesson, one last run-through before you fly</T>
+                <Box x={x + 14} y={76} w={56} h={20} r={999} bg="var(--yellow)" />
+                <T x={x + 14} y={79} w={56} font="dm" size={11} weight={600} lh={14} align="center" color="var(--plum)">D-DAY</T>
+                <T x={x + 132} y={79} w={82} font="dm" size={14} lh="140%" color="var(--plum)" align="right">day 0 ✈</T>
+              </>
+            ) : (
               <>
                 <Box x={x} y={0} w={106} h={106} r={20} bg={bg} />
                 <T x={x + 12} y={11} w={86} font="serif" size={16} lh={16} color={fg}>{l.title}</T>
