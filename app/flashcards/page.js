@@ -19,7 +19,7 @@ export default function FlashCards() {
       <Avatar x={348} y={90} size={49} src={ME} />
       <T x={26} y={150} font="serif" size={44} lh={44}>flash cards</T>
       <T x={315} y={166} font="dm" size={14} weight={500} lh={18} color="var(--plum)">saved  24  →</T>
-      <Link href="/flashcards/coffee-order" className="press">
+      <Link href="/flashcards/coffee-order">
         <Box x={22} y={222} w={376} h={68} r={34} bg="var(--yellow)" />
         <T x={46} y={240} font="serif" size={26} lh={26} color="var(--plum)">12 due today</T>
         <Box x={326} y={232} w={48} h={48} r={24} bg="var(--plum)" />
