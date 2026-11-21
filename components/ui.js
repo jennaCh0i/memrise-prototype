@@ -1,4 +1,5 @@
 "use client";
+import { getSvgPath } from "figma-squircle";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePhone } from "./Phone";
@@ -9,8 +10,13 @@ import { NavIcon, Svg, DECK_BUBBLE } from "./Shapes";
 
 const FONTS = { serif: "var(--serif)", columba: "var(--columba)", dm: "var(--dm)", inter: "var(--inter)", ko: "var(--ko)" };
 
+// iOS-style continuous corners (Figma "corner smoothing" 60%) for any fixed-size rounded box.
+export function squircle(w, h, r) {
+  if (typeof r !== "number" || typeof w !== "number" || typeof h !== "number" || r <= 0 || r >= Math.min(w, h) / 2) return undefined;
+  return `path('${getSvgPath({ width: w, height: h, cornerRadius: r, cornerSmoothing: 0.6 })}')`;
+}
 export function Box({ x, y, w, h, r, bg, style, children, ...rest }) {
-  return <div {...rest} style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, background: bg, ...style }}>{children}</div>;
+  return <div {...rest} style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, clipPath: squircle(w, h, r), background: bg, ...style }}>{children}</div>;
 }
 
 // Text: font = serif | columba | dm | inter | ko ; size px ; lh px or % string ; w for wrapping/alignment.
@@ -27,7 +33,7 @@ export function T({ x, y, w, font = "dm", size = 15, weight = 400, color = "var(
 
 export function Photo({ x, y, w, h, r, src, style }) {
   return (
-    <div style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, overflow: "hidden", background: "#dadada", ...style }}>
+    <div style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, clipPath: squircle(w, h, r), overflow: "hidden", background: "#dadada", ...style }}>
       {src && <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />}
     </div>
   );
@@ -64,18 +70,28 @@ export function Screen({ bg = "#f3f4ef", nav, height = 912, children, overlay })
 
 // ---------- Nav_New ----------
 
-const TABS = [["Home", "/home", "home"], ["Lessons", "/", "lessons"], ["Flash cards", "/flashcards", "flash cards"], ["Community", "/community", "community"]];
+const TABS = [["Home", "/home", "home"], ["Lessons", "/", "lessons"], ["Flash cards", "/flashcards", "memrise"], ["Community", "/community", "community"]];
+const NAV_ICONS = {
+  Home: <path d="M12 2.6c.4 0 .8.15 1.1.42l8.2 7.3c.5.45.2 1.28-.47 1.28H19.6v7.9c0 1-.8 1.8-1.8 1.8H15v-5.2c0-.6-.5-1.1-1.1-1.1h-3.8c-.6 0-1.1.5-1.1 1.1v5.2H6.2c-1 0-1.8-.8-1.8-1.8v-7.9H3.17c-.68 0-1-.83-.48-1.28l8.2-7.3c.32-.27.71-.42 1.11-.42z" />,
+  Lessons: <path d="M2.5 5.6c0-.5.33-.94.8-1.07 2.8-.8 5.6-.45 8.2 1.05v14.1c-2.55-1.35-5.3-1.62-8.2-.82-.4.1-.8-.2-.8-.62zm19 0c0-.5-.33-.94-.8-1.07-2.8-.8-5.6-.45-8.2 1.05v14.1c2.55-1.35 5.3-1.62 8.2-.82.4.1.8-.2.8-.62z" />,
+  "Flash cards": <path d="M8.2 2.5h11a2.3 2.3 0 0 1 2.3 2.3v9.9c0 .7-.5 1.2-1.1 1.3V5.2c0-.6-.5-1.1-1.1-1.1H7c.1-.9.6-1.6 1.2-1.6zM4.8 6.5h11a2.3 2.3 0 0 1 2.3 2.3v10.4a2.3 2.3 0 0 1-2.3 2.3h-11a2.3 2.3 0 0 1-2.3-2.3V8.8a2.3 2.3 0 0 1 2.3-2.3z" />,
+  Community: <g><circle cx="8.8" cy="7.6" r="3.4" /><path d="M2.2 19.2c0-3.5 2.9-5.9 6.6-5.9s6.6 2.4 6.6 5.9c0 .6-.5 1-1 1H3.2c-.6 0-1-.4-1-1z" /><circle cx="16.8" cy="8.4" r="2.7" /><path d="M16.9 13.4c2.9 0 5 1.9 5 4.7 0 .5-.4.9-.9.9h-4.1c.05-2.1-.9-4-2.5-5.2.75-.27 1.6-.4 2.5-.4z" /></g>,
+};
+// Floating iOS-style glass tab bar
 export function NavNew({ active }) {
+  const W = 384, H = 66;
   return (
-    <nav style={{ position: "absolute", left: 0, bottom: 0, width: 420, height: 88, background: "var(--paper)", borderTop: "1px solid var(--stone)", padding: "10px 12px 0", display: "flex", zIndex: 5 }}>
+    <nav style={{ position: "absolute", left: 18, bottom: 28, width: W, height: H, zIndex: 5, clipPath: squircle(W, H, 30), borderRadius: 30,
+      background: "rgba(214, 209, 194, 0.62)", backdropFilter: "blur(22px) saturate(1.6)", WebkitBackdropFilter: "blur(22px) saturate(1.6)",
+      boxShadow: "inset 0 0 0 1px rgba(255,255,255,.55)", display: "flex" }}>
       {TABS.map(([name, href, label]) => {
         const on = name === active;
+        const c = on ? "var(--plum)" : "#ffffff";
         return (
-          <Link key={name} href={href} style={{ width: 99, height: 56, display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }} aria-current={on ? "page" : undefined}>
-            <span style={{ width: 56, height: 32, borderRadius: 999, display: "grid", placeItems: "center", background: on ? "var(--yellow)" : "transparent", transition: "background .2s" }}>
-              <NavIcon name={name} on={on} />
-            </span>
-            <T font="dm" size={10} weight={500} color="var(--plum)" lh={13}>{label}</T>
+          <Link key={name} href={href} aria-current={on ? "page" : undefined}
+            style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 13, gap: 3, color: c, transition: "color .2s" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">{NAV_ICONS[name]}</svg>
+            <T font="dm" size={10} weight={500} color={c} lh={13}>{label}</T>
           </Link>
         );
       })}

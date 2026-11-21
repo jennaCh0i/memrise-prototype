@@ -14,8 +14,8 @@
 }
 @font-face {
   font-family: "FAIRE Octave";
-  src: url("/fonts/FaireOctave-Regular.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
+  src: url("/fonts/FaireOctaveText-Variable.woff2") format("woff2-variations"), url("/fonts/FaireOctaveText-Variable.woff2") format("woff2");
+  font-weight: 100 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "FAIRE Octave";
