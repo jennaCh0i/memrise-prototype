@@ -131,14 +131,14 @@ export default function Home() {
                 <T x={x + 16} y={214} font="dm" size={10} weight={500} ls="0.05em" lh={13} color="#ffffff">{c.tag}</T>
               </>
             );
-            return c.href ? <Link key={i} href={c.href} className="press">{card}</Link> : <div key={i}>{card}</div>;
+            return c.href ? <Link key={i} href={c.href}>{card}</Link> : <div key={i}>{card}</div>;
           })}
         </div>
       </div>
 
       {/* Before your trip */}
       {sectionLabel(32, 742, "Before your trip")}
-      <Link href="/flashcards/coffee-order" className="press">
+      <Link href="/flashcards/coffee-order">
         <Box x={31} y={769} w={178} h={175} r={20} bg="#430b27" />
         <T x={51} y={786} font="dm" size={10} weight={600} lh={13} color="#ffffff">Flashcard</T>
         <T x={51} y={806} w={141} font="serif" size={24} lh="90%" color="#fefff8">{"12 words\nto review"}</T>

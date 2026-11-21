@@ -91,7 +91,13 @@ export default function Lessons() {
                 <T x={x + 12} y={79} w={82} font="dm" size={14} lh="140%" color={fg} align="right">{`day ${l.day}`}</T>
               </>
             );
-            return <div key={l.day} onClick={() => tap(i)} className="press" style={{ cursor: "pointer" }}>{tile}</div>;
+            // Each tile is its own sized box so nothing shifts while the strip is being swiped.
+            return (
+              <div key={l.day} onClick={() => tap(i)}
+                style={{ position: "absolute", left: x, top: 0, width: l.special ? 226 : 106, height: 106, cursor: "pointer", WebkitTapHighlightColor: "transparent" }}>
+                <div style={{ position: "absolute", left: -x, top: 0 }}>{tile}</div>
+              </div>
+            );
           })}
         </div>
       </div>
