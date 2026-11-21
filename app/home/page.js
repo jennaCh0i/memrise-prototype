@@ -21,7 +21,10 @@ const DATES = Array.from({ length: TOTAL }, (_, i) => {
 const LESSON_CARDS = [
   { tag: "TODAY · DAY 13", title: "coffee order", src: "/images/barista.jpg", href: "/lesson/coffee-order/make-it-yours" },
   { tag: "TOMORROW · DAY 12", title: "T-money\ntop-up", src: "/images/tmoney.jpg" },
+  { tag: "DAY 11", title: "pharmacy", src: "/images/pharmacy.jpg" },
+  { tag: "DAY 10", title: "dinner party", src: "/images/dinner.jpg" },
 ];
+const CARD_STEP = 303; // card spacing in the Figma lesson-card row
 // [label, labelY, trackY, fillW, countY, count]
 const READY = [
   ["Getting around", 1090, 1090, 160, 1084, "4/4"],
@@ -102,17 +105,22 @@ export default function Home() {
       {/* Lessons — cards scroll sideways */}
       {sectionLabel(37, 449, "Lessons")}
       <div className="hscroll" style={{ position: "absolute", left: 0, top: 477, width: 420, height: 241, scrollSnapType: "x mandatory", scrollPaddingLeft: 31 }}>
-        <div style={{ position: "relative", width: 31 + LESSON_CARDS.length * 304 + 11, height: 241 }}>
+        <div style={{ position: "relative", width: 31 + (LESSON_CARDS.length - 1) * CARD_STEP + 292 + 31, height: 241 }}>
           {LESSON_CARDS.map((c, i) => {
-            const x = 31 + i * 304;
-            const tagW = Math.max(118, c.tag.length * 7.2 + 18);
+            const x = 31 + i * CARD_STEP;
+            const twoLines = c.title.includes("\n");
+            // Card layout (week 10): photo + fade, white icon tile top-right, title + tag bottom-left
             const card = (
               <>
                 <Photo x={x} y={0} w={292} h={241} r={20} src={c.src} style={{ scrollSnapAlign: "start" }} />
                 <Box x={x} y={0} w={292} h={241} r={20} style={{ background: FADE }} />
-                <Box x={x + 16} y={16} w={tagW} h={24} r={12} bg="#fefff8" />
-                <T x={x + 16} y={22} w={tagW} font="dm" size={10} weight={600} lh={12} align="center" color="#430b27">{c.tag}</T>
-                <T x={x + 16} y={c.title.includes("\n") ? 177 : 199} font="serif" size={24} lh={c.title.includes("\n") ? "95%" : 31} color="#ffffff">{c.title}</T>
+                <Box x={x + 235} y={12} w={45} h={45} r={13} bg="#fefff8" />
+                <svg width="18" height="15" viewBox="0 0 18 15" fill="#430b27" style={{ position: "absolute", left: x + 249, top: 27 }}>
+                  <path d="M17.9999 10.9706C17.9999 12.0752 17.1045 12.9706 15.9999 12.9706H15.1764C13.3289 12.9706 11.6556 13.4594 9.5293 14.8235V2.94606C9.5293 2.26487 9.87118 1.62112 10.4673 1.29153C12.167 0.351866 13.609 0 15.1764 0H15.9999C17.1045 0 17.9999 0.895431 17.9999 2V10.9706Z" />
+                  <path d="M0.000114441 10.9706C0.000114441 12.0752 0.895545 12.9706 2.00011 12.9706H2.82364C4.67107 12.9706 6.34443 13.4594 8.4707 14.8235V2.94606C8.4707 2.26487 8.12882 1.62112 7.53268 1.29153C5.83305 0.351866 4.39099 0 2.82364 0H2.00011C0.895545 0 0.000114441 0.895431 0.000114441 2V10.9706Z" />
+                </svg>
+                <T x={x + 16} y={twoLines ? 161 : 176} font="serif" size={24} lh={twoLines ? "95%" : 31} color="#fefff8">{c.title}</T>
+                <T x={x + 16} y={214} font="dm" size={10} weight={500} ls="0.05em" lh={13} color="#ffffff">{c.tag}</T>
               </>
             );
             return c.href ? <Link key={i} href={c.href} className="press">{card}</Link> : <div key={i}>{card}</div>;
