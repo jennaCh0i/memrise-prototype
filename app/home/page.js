@@ -85,7 +85,15 @@ export default function Home() {
   const [left, setLeft] = useState(DAYS_LEFT_TODAY);
   return (
     <Screen bg="#f7f6f2" nav="Home" height={1349}>
-      <Svg w={420} h={337} d={HOME_HEADER} fill="#FFCF00" />
+      {/* Header gradient from Figma ("Exclude"): #F7F8EA → #FFCF00, mostly yellow, lightening toward the top */}
+      <Svg w={420} h={337} d={HOME_HEADER} fill="url(#homeHeaderGrad)">
+        <defs>
+          <linearGradient id="homeHeaderGrad" gradientUnits="objectBoundingBox" x1="0.5" y1="-1.605" x2="0.5" y2="0.895">
+            <stop offset="0" stopColor="#F7F8EA" />
+            <stop offset="1" stopColor="#FFCF00" />
+          </linearGradient>
+        </defs>
+      </Svg>
       <Wordmark />
       <Avatar x={348} y={90} size={49} src={ME} />
       <div style={{ position: "absolute", left: 26, top: 115, lineHeight: "112px", whiteSpace: "pre", color: "#2a2a28" }}>
