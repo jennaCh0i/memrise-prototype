@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Screen, Box, T, Photo, Button } from "@/components/ui";
 
 // Lesson / 02 · Situation detail
+// icon/lock-fill (Figma components page)
+const LOCK = "M7.2 9.6V7.6C7.2 4.95 9.35 2.8 12 2.8C14.65 2.8 16.8 4.95 16.8 7.6V9.6C18.75 9.75 20 10.9 20 13.6V16.8C20 20.1 18.9 21.2 15.6 21.2H8.4C5.1 21.2 4 20.1 4 16.8V13.6C4 10.9 5.25 9.75 7.2 9.6ZM9.4 9.56H14.6V7.6C14.6 6.16 13.44 5 12 5C10.56 5 9.4 6.16 9.4 7.6V9.56ZM12 13.2C11.12 13.2 10.4 13.92 10.4 14.8C10.4 15.4 10.73 15.92 11.2 16.2V17.4C11.2 17.84 11.56 18.2 12 18.2C12.44 18.2 12.8 17.84 12.8 17.4V16.2C13.27 15.92 13.6 15.4 13.6 14.8C13.6 13.92 12.88 13.2 12 13.2Z";
 const SCENES = [
   ["Meet the barista", "✓ done", "#b1c2fa"],
   ["Order a drink", "today", "#e1b3e3"],
@@ -33,7 +35,13 @@ export default function SituationDetail() {
             <Box x={38} y={y + 14} w={6} h={28} r={3} bg={c} />
             <T x={58} y={y + 17} font="serif" size={18} lh={22} color="#8a857e">{String(i + 1)}</T>
             <T x={82} y={y + 18} font="dm" size={15} weight={500} lh={20} color={locked ? "#8a857e" : "#1f1d1c"}>{title}</T>
-            <T x={316} y={y + 20} w={64} font="dm" size={12} weight={500} lh={16} align="right" color={today ? "var(--plum)" : "#8a857e"}>{status}</T>
+            {locked ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#8a857e" style={{ position: "absolute", left: 362, top: y + 19 }} aria-label="locked">
+                <path fillRule="evenodd" d={LOCK} />
+              </svg>
+            ) : (
+              <T x={316} y={y + 20} w={64} font="dm" size={12} weight={500} lh={16} align="right" color={today ? "var(--plum)" : "#8a857e"}>{status}</T>
+            )}
           </div>
         );
       })}
