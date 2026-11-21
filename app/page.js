@@ -34,11 +34,14 @@ export default function Lessons() {
   const router = useRouter();
   const start = LESSONS.findIndex((l) => l.today);
   const [sel, setSel] = useState(start);
+  const [progress, setProgress] = useState(start / (LESSONS.length - 1)); // 0 → first lesson, 1 → Day 0
 
   useEffect(() => { if (strip.current) strip.current.scrollLeft = start * STEP; }, [start]);
 
   const onScroll = () => {
-    const i = Math.max(0, Math.min(LESSONS.length - 1, Math.round(strip.current.scrollLeft / STEP)));
+    const pos = strip.current.scrollLeft / STEP;
+    setProgress(Math.max(0, Math.min(1, pos / (LESSONS.length - 1))));
+    const i = Math.max(0, Math.min(LESSONS.length - 1, Math.round(pos)));
     if (i !== sel) setSel(i);
   };
   const tap = (i) => {
@@ -103,7 +106,8 @@ export default function Lessons() {
       </div>
 
       <Box x={26} y={794} w={368} h={6} r={3} bg="#dadada" />
-      <Box x={26} y={794} w={159.5} h={6} r={3} bg="#430b27" />
+      {/* progress bar follows the strip: how far along the lessons you are (Day 0 = full) */}
+      <Box x={26} y={794} w={Math.max(6, Math.round(368 * progress))} h={6} r={3} bg="#430b27" />
     </Screen>
   );
 }
