@@ -1,69 +1,103 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { Screen, Box, T, Photo } from "@/components/ui";
 import { Svg, LESSON_CURVE } from "@/components/Shapes";
 import { LESSONS as BASE, TODAY } from "@/lib/lessons";
 
-// Tab / Lessons
-// Tiles are 106×106, 120 apart (from Figma). The strip scrolls sideways and
-// opens with today's lesson (day 13) at x 79, exactly where the Figma frame has it.
-// Days count down (D-day until the trip), so they descend left → right, ending on day 0.
+// Tab / Lessons — week 10 (Coffee order / T-money / Pharmacy / Airport frames).
+// Swipe the tiles: the one sitting in the yellow slot (x 79) is selected, and the hero photo,
+// "day N" and big title above switch to that lesson. Tap a tile to jump to it; tap the
+// selected tile again to open the lesson (where there is one).
+const HERO = {
+  "coffee\norder": { name: "Coffee order", src: "/images/barista.jpg", x: -41 },
+  "T-money\ntop-up": { name: "T-money", src: "/images/hero-tmoney.jpg", x: -41 },
+  pharmacy: { name: "Pharmacy", src: "/images/hero-pharmacy.jpg", x: -81 },
+  "airport\ncheck-in": { name: "Airport", src: "/images/hero-airport.jpg", x: -41 },
+};
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const LESSONS = [
-  ...BASE.map((l) => (l.day === TODAY ? { ...l, today: true, href: "/lesson/coffee-order/make-it-yours" } : l)),
-  { day: 0, title: "the big recap", special: true, href: "/lesson/day-0" },
+  ...BASE.map((l) => ({
+    ...l,
+    today: l.day === TODAY,
+    href: l.day === TODAY ? "/lesson/coffee-order/make-it-yours" : undefined,
+    hero: HERO[l.title] || { name: cap(l.title.replace("\n", " ")) },
+  })),
+  { day: 0, title: "the big recap", special: true, href: "/lesson/day-0", hero: { name: "The big recap" } },
 ];
-const PAD = 26;
-const STEP = 120;
-const TODAY_X = 79;
+const SLOT = 79;   // x of the selected tile (Figma)
+const STEP = 120;  // tile spacing (Figma)
+const DARKEN = "linear-gradient(180deg, rgba(0,0,0,0) 58.6%, #000 94.6%)"; // Figma "Rectangle 53"
 
 export default function Lessons() {
   const strip = useRef(null);
-  useEffect(() => {
-    const i = LESSONS.findIndex((l) => l.today);
-    if (strip.current) strip.current.scrollLeft = PAD + i * STEP - TODAY_X;
-  }, []);
+  const router = useRouter();
+  const start = LESSONS.findIndex((l) => l.today);
+  const [sel, setSel] = useState(start);
+
+  useEffect(() => { if (strip.current) strip.current.scrollLeft = start * STEP; }, [start]);
+
+  const onScroll = () => {
+    const i = Math.max(0, Math.min(LESSONS.length - 1, Math.round(strip.current.scrollLeft / STEP)));
+    if (i !== sel) setSel(i);
+  };
+  const tap = (i) => {
+    if (i === sel && LESSONS[i].href) router.push(LESSONS[i].href);
+    else strip.current.scrollTo({ left: i * STEP, behavior: "smooth" });
+  };
+
+  const cur = LESSONS[sel];
+  const name = cur.hero.name;
+  const titleSize = name.length > 14 ? 40 : 50;
 
   return (
     <Screen bg="#f7f6f2" nav="Lessons">
-      <Photo x={-41} y={-123} w={516} h={774} src="/images/barista.jpg" />
+      {/* hero */}
+      <div key={sel} className="fade">
+        {cur.hero.src ? (
+          <Photo x={cur.hero.x} y={-123} w={516} h={774} src={cur.hero.src} />
+        ) : (
+          <Box x={0} y={0} w={420} h={651} style={{ background: cur.special ? "linear-gradient(180deg, #b1c2fa 0%, #6d6fb0 100%)" : "linear-gradient(180deg, #6b2a49 0%, #430b27 100%)" }} />
+        )}
+      </div>
+      <Box x={-3} y={48} w={431} h={577} style={{ background: DARKEN }} />
       <Svg x={0} y={531} w={420} h={381} d={LESSON_CURVE} fill="#FEFFF8" />
-      <T x={26} y={410} font="columba" size={30} lh="140%" color="var(--paper)">day 13</T>
-      <T x={26} y={437} font="columba" size={50} lh="140%" color="var(--paper)">coffee order</T>
+      <T x={26} y={400} font="serif" size={26} lh="140%" color="#fefff8">{`day ${cur.day}`}</T>
+      <T x={26} y={437 + (50 - titleSize) * 0.7} w={380} font="serif" size={titleSize} lh="140%" ls="-0.03em" color="#fefff8"
+        style={{ whiteSpace: "nowrap" }}>{name}</T>
 
-      <div ref={strip} className="hscroll" style={{ position: "absolute", left: 0, top: 651, width: 420, height: 106 }}>
-        <div style={{ position: "relative", width: PAD * 2 + (LESSONS.length - 1) * STEP + 226, height: 106 }}>
+      {/* lesson tiles */}
+      <div ref={strip} onScroll={onScroll} className="hscroll"
+        style={{ position: "absolute", left: 0, top: 651, width: 420, height: 106, scrollSnapType: "x mandatory", scrollPaddingLeft: SLOT }}>
+        <div style={{ position: "relative", width: (LESSONS.length - 1) * STEP + 420 + 120, height: 106 }}>
           {LESSONS.map((l, i) => {
-            const x = PAD + i * STEP;
-            const bg = l.today ? "var(--yellow)" : "var(--plum)";
-            const fg = l.today ? "var(--plum)" : "var(--paper)";
+            const x = SLOT + i * STEP;
+            const on = i === sel;
+            const bg = on ? "#ffcf00" : "#430b27";
+            const fg = on ? "#430b27" : "#fefff8";
             const tile = l.special ? (
               <>
-                <Box x={x} y={0} w={226} h={106} r={20} bg="var(--periwinkle)" style={{ boxShadow: "inset 0 0 0 2px var(--plum)" }} />
-                <T x={x + 14} y={11} w={200} font="serif" size={22} lh={22} color="var(--plum)">the big recap</T>
-                <T x={x + 14} y={37} w={160} font="dm" size={12} lh={16} color="var(--plum)">every lesson, one last run-through before you fly</T>
-                <Box x={x + 14} y={76} w={56} h={20} r={999} bg="var(--yellow)" />
-                <T x={x + 14} y={79} w={56} font="dm" size={11} weight={600} lh={14} align="center" color="var(--plum)">D-DAY</T>
-                <T x={x + 132} y={79} w={82} font="dm" size={14} lh="140%" color="var(--plum)" align="right">day 0 ✈</T>
+                <Box x={x} y={0} w={226} h={106} r={20} bg="#b1c2fa" style={{ scrollSnapAlign: "start", boxShadow: on ? "inset 0 0 0 3px #ffcf00" : "inset 0 0 0 2px #430b27" }} />
+                <T x={x + 14} y={11} w={200} font="serif" size={22} lh={22} color="#430b27">the big recap</T>
+                <T x={x + 14} y={37} w={160} font="dm" size={12} lh={16} color="#430b27">every lesson, one last run-through before you fly</T>
+                <Box x={x + 14} y={76} w={56} h={20} r={10} bg="#ffcf00" />
+                <T x={x + 14} y={79} w={56} font="dm" size={11} weight={600} lh={14} align="center" color="#430b27">D-DAY</T>
+                <T x={x + 132} y={79} w={82} font="dm" size={14} lh="140%" color="#430b27" align="right">day 0 ✈</T>
               </>
             ) : (
               <>
-                <Box x={x} y={0} w={106} h={106} r={20} bg={bg} />
-                <T x={x + 12} y={11} w={86} font="serif" size={16} lh={16} color={fg}>{l.title}</T>
+                <Box x={x} y={0} w={106} h={106} r={20} bg={bg} style={{ scrollSnapAlign: "start", transition: "background .15s" }} />
+                <T x={x + 12} y={11} w={86} font="serif" size={16} lh="100%" color={fg}>{l.title}</T>
                 <T x={x + 12} y={79} w={82} font="dm" size={14} lh="140%" color={fg} align="right">{`day ${l.day}`}</T>
               </>
             );
-            return l.href ? (
-              <Link key={l.day} href={l.href} className="press" style={{ scrollSnapAlign: "start" }}>{tile}</Link>
-            ) : (
-              <div key={l.day}>{tile}</div>
-            );
+            return <div key={l.day} onClick={() => tap(i)} className="press" style={{ cursor: "pointer" }}>{tile}</div>;
           })}
         </div>
       </div>
 
       <Box x={26} y={794} w={368} h={6} r={3} bg="#dadada" />
-      <Box x={26} y={794} w={159} h={6} r={3} bg="var(--plum)" />
+      <Box x={26} y={794} w={159.5} h={6} r={3} bg="#430b27" />
     </Screen>
   );
 }
