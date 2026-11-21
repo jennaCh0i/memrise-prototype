@@ -1,36 +1,86 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Screen, T, BackLink, TextField, Pill, ChoiceTile, Button } from "@/components/ui";
+import { Screen, Box, T, BackLink, Button } from "@/components/ui";
 
-// Lesson / 02 · Make it yours
-const SUGGESTIONS = [["아아", "iced americano"], ["라떼", "latte"], ["따아", "hot americano"], ["바닐라 라떼", "vanilla latte"]];
-const WHO = [[24, 473, "Just me"], [214, 473, "A friend"], [24, 545, "Someone older"], [214, 545, "Ordering for a group"]];
+// Lesson / 02 · Make it yours — week 10, two steps:
+//   1. type your go-to order (or tap popular picks)   2. who's with you?
+// [ko, en, x, y, w] — positions and widths from the Figma frame
+const PICKS = [
+  ["아아", "iced americano", 25, 523, 186], ["카페 라떼", "cafe latte", 219, 523, 181],
+  ["녹차 라떼", "matcha latte", 25, 574, 194], ["따아", "hot americano", 227, 574, 169],
+  ["아이스티", "iced tea", 25, 625, 165], ["바닐라 라떼", "vanilla latte", 198, 625, 202],
+];
+const WHO = ["Just me", "Someone older", "A friend", "Ordering for a group"];
+
+function Header() {
+  return (
+    <>
+      <T x={24} y={121} font="dm" size={12} weight={500} ls="0.06em" lh={16} color="#430b27">DAY 13 · COFFEE ORDER</T>
+      <T x={21} y={143} font="serif" size={34} lh="110%" ls="-0.01em" color="#2a2a28">Make it your order</T>
+    </>
+  );
+}
 
 export default function MakeItYours() {
   const router = useRouter();
-  const [drink, setDrink] = useState("vanilla oat latte");
+  const [step, setStep] = useState(1);
+  const [order, setOrder] = useState("");
+  const [picks, setPicks] = useState(["iced americano", "cafe latte", "matcha latte"]);
   const [who, setWho] = useState("Just me");
+  const toggle = (en) => setPicks((p) => (p.includes(en) ? p.filter((x) => x !== en) : [...p, en]));
+
+  if (step === 2) {
+    return (
+      <Screen bg="#f3f4ef">
+        <button onClick={() => setStep(1)} style={{ position: "absolute", left: 24, top: 66, height: 24, display: "flex", alignItems: "center", gap: 8, color: "var(--ink-soft)" }}>
+          <T font="dm" size={20} lh={24}>←</T><T font="dm" size={15} lh={20}>back</T>
+        </button>
+        <Header />
+        <T x={24} y={223} font="dm" size={15} weight={500} lh={20} color="#a3a3a3">Who&apos;s with you?</T>
+        <div role="radiogroup">
+          {WHO.map((label, i) => {
+            const on = who === label;
+            return (
+              <button key={label} role="radio" aria-checked={on} onClick={() => setWho(label)}
+                style={{ position: "absolute", left: 24, top: 265 + i * 72, width: 363, height: 64, padding: 0, textAlign: "left" }}>
+                <Box x={0} y={0} w={363} h={64} r={20} bg={on ? "#430b27" : "#ecebe4"} style={{ transition: "background .15s" }} />
+                <T x={16} y={22} font="dm" size={15} lh={20} color={on ? "#fefff8" : "#2b2b2b"}>{label}</T>
+              </button>
+            );
+          })}
+        </div>
+        <Button x={24} y={820} label="Build my scene" onClick={() => router.push("/lesson/coffee-order")} />
+      </Screen>
+    );
+  }
+
   return (
     <Screen bg="#f3f4ef">
       <BackLink x={24} y={66} href="/" />
-      <T x={24} y={114} font="dm" size={11} weight={600} ls="0.06em" lh={14} color="var(--plum)">DAY 13 · COFFEE ORDER</T>
-      <T x={24} y={136} font="serif" size={34} lh="110%">Make it your order</T>
+      <Header />
 
-      <T x={24} y={195} font="dm" size={15} weight={500} lh={20}>What do you usually order?</T>
-      <TextField x={24} y={223} value={drink} onChange={setDrink} placeholder="Type or say your drink" filled={!!drink} />
-      <T x={24} y={291} font="dm" size={13} lh={17} color="var(--ash)">Popular at Seoul cafés</T>
-      <div style={{ position: "absolute", left: 24, top: 316, width: 372, display: "flex", flexWrap: "wrap", gap: "12px 8px" }}>
-        {SUGGESTIONS.map(([ko, en]) => <Pill key={en} ko={ko} en={en} on={drink.trim().toLowerCase() === en} onClick={() => setDrink(en)} />)}
+      {/* your go-to order */}
+      <Box x={24} y={233} w={370} h={237} r={20} bg="#ecebe4" />
+      <textarea value={order} onChange={(e) => setOrder(e.target.value)} placeholder="what is your go to order?" aria-label="Your go-to order"
+        style={{ position: "absolute", left: 24, top: 233, width: 370, height: 237, padding: "24px 24px 24px 31px", background: "transparent", border: 0, resize: "none",
+          fontFamily: "var(--dm), var(--ko)", fontSize: 24, lineHeight: "130%", letterSpacing: "-0.03em", color: "#2a2a28" }} />
+
+      <T x={28} y={487} font="dm" size={15} weight={500} lh={20} color="#a3a3a3">Popular picks:</T>
+      <div>
+        {PICKS.map(([ko, en, x, y, w]) => {
+          const on = picks.includes(en);
+          return (
+            <button key={en} onClick={() => toggle(en)} aria-pressed={on}
+              style={{ position: "absolute", left: x, top: y, width: w, height: 43, padding: 0, justifyContent: "center", whiteSpace: "nowrap", borderRadius: 999, background: on ? "#430b27" : "#ecebe4", display: "flex", alignItems: "center", gap: 4, transition: "background .15s" }}>
+              <span style={{ fontFamily: "var(--dm), var(--ko)", fontSize: 15, fontWeight: 500, color: on ? "#fefff8" : "#430b27" }}>{ko}</span>
+              <span style={{ fontFamily: "var(--dm)", fontSize: 15, color: on ? "#fefff8" : "#7e7e7e" }}>{en}</span>
+            </button>
+          );
+        })}
       </div>
 
-      <T x={24} y={445} font="dm" size={15} weight={500} lh={20}>Who's with you?</T>
-      <div role="radiogroup">
-        {WHO.map(([x, y, l]) => <ChoiceTile key={l} x={x} y={y} label={l} on={who === l} onClick={() => setWho(l)} />)}
-      </div>
-      <T x={24} y={617} w={372} font="dm" size={13} lh={17} color="var(--ash)">Someone older (a boss, in-laws) switches your lines to polite 합니다체.</T>
-
-      <Button x={24} y={820} label="Build my scene" disabled={!drink.trim()} onClick={() => router.push("/lesson/coffee-order")} />
+      <Button x={24} y={820} label="Build my scene" onClick={() => setStep(2)} />
     </Screen>
   );
 }
