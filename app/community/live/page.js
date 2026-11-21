@@ -127,10 +127,10 @@ export default function SpeakingRoom() {
     <Screen bg="var(--plum)" overlay={
       <>
         {/* bottom bar */}
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 120, background: "var(--paper)", borderTop: "1px solid var(--stone)" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 120, background: "var(--paper)" }}>
           {typing ? (
             <form onSubmit={(e) => { e.preventDefault(); sendTyped(); }}
-              style={{ position: "absolute", left: 24, top: 18, width: 372, height: 56, borderRadius: 999, background: "#fff", boxShadow: "inset 0 0 0 1.5px var(--yellow)", display: "flex", alignItems: "center", gap: 8, padding: "0 8px 0 8px" }}>
+              style={{ position: "absolute", left: 24, top: 18, width: 372, height: 56, borderRadius: 999, background: "#ecebe4", display: "flex", alignItems: "center", gap: 8, padding: "0 8px 0 8px" }}>
               <button type="button" aria-label="Close" onClick={() => { setTyping(null); setDraft(""); }} className="press"
                 style={{ width: 40, height: 40, borderRadius: 999, display: "grid", placeItems: "center", color: "var(--plum)" }}><Icon name="x" size={20} /></button>
               <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value)}
@@ -146,7 +146,7 @@ export default function SpeakingRoom() {
                 <Icon name="chat" size={22} />
               </button>
               <button onClick={() => setTyping("question")} className="press"
-                style={{ position: "absolute", left: 84, top: 28, width: 228, height: 40, borderRadius: 999, background: "#fff", boxShadow: "inset 0 0 0 1px var(--stone)",
+                style={{ position: "absolute", left: 84, top: 28, width: 228, height: 40, borderRadius: 999, background: "#ecebe4",
                   fontFamily: "var(--dm)", fontSize: 15, color: "var(--charcoal)", display: "flex", alignItems: "center", justifyContent: "center" }}>＋ Ask a question</button>
               <button aria-label={listening ? "Stop" : "Speak"} onClick={phase === "room" ? toggleMic : () => setPhase("room")} className={`press${listening ? " pulse" : ""}`}
                 style={{ position: "absolute", left: 324, top: 10, width: 72, height: 72, borderRadius: 999, display: "grid", placeItems: "center",
@@ -200,7 +200,7 @@ export default function SpeakingRoom() {
           )}
           {current ? (
             <div key={`c${lines.length}${showingLive}`} className="rise">
-              <Face x={32} y={536} who={current.who} style={current.who === speaker || showingLive ? { boxShadow: "0 0 0 3px var(--yellow)" } : undefined} />
+              <Face x={32} y={536} who={current.who}  />
               <T x={72} y={536} w={324} font="ko" size={current.text.length > 16 ? 20 : 24} weight={500} lh={32} color="var(--plum)">
                 {current.question ? `Q. ${current.text}` : current.text}{showingLive ? "▍" : ""}
               </T>

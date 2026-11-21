@@ -15,7 +15,7 @@ export default function Play() {
       <T x={44} y={264} font="dm" size={11} weight={600} ls="0.06em" lh={14} color="var(--yellow)">● LIVE NOW · 14 LEARNERS</T>
       <T x={44} y={284} font="serif" size={24} lh="115%" color="var(--paper)">Korean speaking room</T>
       <T x={44} y={318} font="dm" size={13} lh={17} color="var(--paper)">Today’s topic: 주말에 뭐 했어요?</T>
-      {[P2, P3, ME].map((s, i) => <Avatar key={i} x={44 + i * 22} y={354} size={30} src={s} ring="0 0 0 2px var(--plum)" />)}
+      {[P2, P3, ME].map((s, i) => <Avatar key={i} x={44 + i * 22} y={354} size={30} src={s} />)}
       <Button x={306} y={349} small kind="accent" label="Join" href="/community/live" />
 
       <T x={24} y={433} font="dm" size={15} weight={500} lh={20}>Word games</T>

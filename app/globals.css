@@ -78,3 +78,7 @@ input { font: inherit; color: inherit; border: 0; outline: 0; background: transp
 
 /* On a phone the app fills the screen, including the area under the status bar */
 @media (max-width: 519px) { html, body { background: #f7f6f2; } }
+
+/* No outlines anywhere — including the focus ring a tap leaves behind */
+*:focus, *:focus-visible { outline: none; }
+button, input, a { -webkit-tap-highlight-color: transparent; }

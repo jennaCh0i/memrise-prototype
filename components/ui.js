@@ -97,8 +97,7 @@ export function NavNew({ active }) {
       <div aria-hidden style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 142, zIndex: 4, pointerEvents: "none",
         background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FEFFF8 71%, #FEFFF8 100%)" }} />
       <nav style={{ position: "absolute", left: 18, bottom: 25, width: W, height: H, zIndex: 5, clipPath: squircle(W, H, 20), borderRadius: 20,
-        background: "rgba(225, 222, 209, 0.85)", backdropFilter: "blur(2px) saturate(1.15)", WebkitBackdropFilter: "blur(2px) saturate(1.15)",
-        boxShadow: "inset 1px 1px 0 rgba(255,255,255,.35)" }}>
+        background: "rgba(225, 222, 209, 0.85)", backdropFilter: "blur(2px) saturate(1.15)", WebkitBackdropFilter: "blur(2px) saturate(1.15)" }}>
         {TABS.map(([name, href, label], i) => {
           const on = name === active;
           const c = on ? "#430B27" : "#FEFFF8";
@@ -126,7 +125,7 @@ const BTN = {
   dark: { background: "var(--charcoal)", color: "var(--paper)" },
   brand: { background: "var(--plum)", color: "var(--paper)" },
   accent: { background: "var(--yellow)", color: "var(--plum)" },
-  light: { background: "var(--paper)", color: "var(--plum)", boxShadow: "inset 0 0 0 1px var(--stone)" },
+  light: { background: "#ecebe4", color: "var(--plum)" },
 };
 export function Button({ x, y, w = 372, label, kind = "dark", small, href, onClick, disabled, style }) {
   const s = {
@@ -164,7 +163,7 @@ export function Segmented({ x, y, value }) {
     );
   };
   return (
-    <div style={{ position: "absolute", left: x, top: y, height: 42, padding: 4, border: "1px solid var(--stone)", borderRadius: 999, background: "#fff", display: "flex" }}>
+    <div style={{ position: "absolute", left: x, top: y, height: 42, padding: 4, borderRadius: 999, background: "#ecebe4", display: "flex" }}>
       {item("Talk", "/community")}{item("Play", "/community/play")}
     </div>
   );
@@ -174,7 +173,7 @@ export function TextField({ x, y, w = 372, value, onChange, placeholder, filled,
   return (
     <form onSubmit={(e) => { e.preventDefault(); onSubmit && onSubmit(); }}
       style={{ position: x === undefined ? "relative" : "absolute", left: x, top: y, width: w, height: 56, borderRadius: 999, background: "#fff",
-        boxShadow: filled ? "inset 0 0 0 1.5px var(--yellow)" : "inset 0 0 0 1px var(--stone)", display: "flex", alignItems: "center", gap: 8, padding: "0 8px 0 20px" }}>
+        background: filled ? "#fff6cc" : "#ecebe4", display: "flex", alignItems: "center", gap: 8, padding: "0 8px 0 20px" }}>
       <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
         style={{ flex: 1, minWidth: 0, fontFamily: "var(--dm)", fontSize: 15, color: "var(--ink-soft)" }} />
       {(mic || send) && (
@@ -190,7 +189,7 @@ export function TextField({ x, y, w = 372, value, onChange, placeholder, filled,
 export function Pill({ ko, en, on, onClick }) {
   return (
     <button onClick={onClick} className="press" style={{ height: 32, padding: "0 12px", borderRadius: 999, display: "inline-flex", alignItems: "center", gap: 4,
-      background: on ? "var(--plum)" : "#fff", boxShadow: on ? "none" : "inset 0 0 0 1px var(--stone)" }}>
+      background: on ? "var(--plum)" : "#ecebe4" }}>
       <T font="dm" size={15} weight={500} color={on ? "var(--paper)" : "var(--plum)"} lh={20}>{ko}</T>
       <T font="dm" size={13} color={on ? "var(--paper)" : "var(--ash)"} lh={17}>{en}</T>
     </button>
@@ -228,8 +227,7 @@ export function WordStack({ x, y, card, flipped, onFlip }) {
 
 export function MenuRow({ x, y, word, meaning, full, due, onClick, on }) {
   return (
-    <button onClick={onClick} style={{ position: "absolute", left: x, top: y, width: 372, height: 64, borderRadius: 16, background: "#fff", padding: "0 16px", display: "flex", alignItems: "center", gap: 12,
-      boxShadow: on ? "inset 0 0 0 1.5px var(--plum)" : "none" }}>
+    <button onClick={onClick} style={{ position: "absolute", left: x, top: y, width: 372, height: 64, borderRadius: 16, background: on ? "#fff6cc" : "#fff", padding: "0 16px", display: "flex", alignItems: "center", gap: 12 }}>
       <span style={{ width: 88, flex: "none" }}><T font="ko" size={16} weight={500} color="var(--plum)" lh={24}>{word}</T></span>
       <span style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <T font="dm" size={15} weight={500} lh={20}>{meaning}</T>
@@ -288,8 +286,7 @@ export function TopicCard({ x, y, topic, onNext }) {
 export function LiveQuestion({ x, y, q, onVote }) {
   const air = q.state === "on air";
   return (
-    <div className="rise" style={{ position: "absolute", left: x, top: y, width: 372, height: 56, borderRadius: 16, background: "#fff", display: "flex", alignItems: "center", gap: 12, padding: "0 14px 0 8px",
-      boxShadow: air ? "inset 0 0 0 2px var(--yellow)" : "none" }}>
+    <div className="rise" style={{ position: "absolute", left: x, top: y, width: 372, height: 56, borderRadius: 16, background: air ? "#fff6cc" : "#fff", display: "flex", alignItems: "center", gap: 12, padding: "0 14px 0 8px" }}>
       <button onClick={onVote} aria-label="Upvote" style={{ width: 40, height: 40, borderRadius: 12, background: q.voted ? "var(--plum)" : "var(--cream)", color: q.voted ? "var(--paper)" : "var(--plum)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: "none" }}>
         <T font="dm" size={10} weight={500} lh={12} color="inherit">▲</T>
         <T font="dm" size={15} weight={500} lh={18} color="inherit">{q.votes}</T>
@@ -307,10 +304,10 @@ export function Speaker({ x, y, name, role, src, speaking, vote, hand }) {
   return (
     <div style={{ position: "absolute", left: x, top: y, width: 104, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
       <div style={{ position: "relative", width: 84, height: 84 }}>
-        <div style={{ width: 84, height: 84, borderRadius: 30, overflow: "hidden", background: "var(--lilac)", boxShadow: speaking ? "0 0 0 4px var(--yellow)" : "none", transition: "box-shadow .2s" }}>
+        <div style={{ width: 84, height: 84, borderRadius: 30, overflow: "hidden", background: "var(--lilac)", opacity: speaking ? 1 : 0.85, transition: "box-shadow .2s" }}>
           {src && <AvatarFill src={src} />}
         </div>
-        {vote && <span style={{ position: "absolute", left: -4, top: -4, width: 22, height: 22, borderRadius: 99, background: vote, boxShadow: "0 0 0 3px var(--paper)" }} />}
+        {vote && <span style={{ position: "absolute", left: -4, top: -4, width: 22, height: 22, borderRadius: 99, background: vote, }} />}
         {!speaking && <span style={{ position: "absolute", left: 62, top: 62, width: 28, height: 28, borderRadius: 99, background: "#fff", display: "grid", placeItems: "center", color: "var(--ash)" }}><Icon name="micOff" size={16} /></span>}
         {hand && <span style={{ position: "absolute", right: -8, top: -10, fontSize: 22 }}>✋</span>}
       </div>
@@ -327,7 +324,7 @@ function AvatarFill({ src }) {
 
 export function RoundLight({ x, y, icon, onClick, label }) {
   return (
-    <button onClick={onClick} aria-label={label} className="press" style={{ position: "absolute", left: x, top: y, width: 48, height: 48, borderRadius: 99, background: "#fff", boxShadow: "inset 0 0 0 1px var(--stone)", display: "grid", placeItems: "center", color: "var(--plum)" }}>
+    <button onClick={onClick} aria-label={label} className="press" style={{ position: "absolute", left: x, top: y, width: 48, height: 48, borderRadius: 99, background: "#ecebe4", display: "grid", placeItems: "center", color: "var(--plum)" }}>
       <Icon name={icon} />
     </button>
   );
