@@ -10,10 +10,10 @@ import { NavIcon, Svg, DECK_BUBBLE } from "./Shapes";
 
 const FONTS = { serif: "var(--serif)", columba: "var(--columba)", dm: "var(--dm)", inter: "var(--inter)", ko: "var(--ko)" };
 
-// iOS-style continuous corners (Figma "corner smoothing" 60%) for any fixed-size rounded box.
+// iOS-style continuous corners (Figma corner smoothing 100%, as in the week 10 frames) for any fixed-size rounded box.
 export function squircle(w, h, r) {
   if (typeof r !== "number" || typeof w !== "number" || typeof h !== "number" || r <= 0 || r >= Math.min(w, h) / 2) return undefined;
-  return `path('${getSvgPath({ width: w, height: h, cornerRadius: r, cornerSmoothing: 0.6 })}')`;
+  return `path('${getSvgPath({ width: w, height: h, cornerRadius: r, cornerSmoothing: 1 })}')`;
 }
 export function Box({ x, y, w, h, r, bg, style, children, ...rest }) {
   return <div {...rest} style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, clipPath: squircle(w, h, r), background: bg, ...style }}>{children}</div>;
@@ -71,31 +71,52 @@ export function Screen({ bg = "#f3f4ef", nav, height = 912, children, overlay })
 // ---------- Nav_New ----------
 
 const TABS = [["Home", "/home", "home"], ["Lessons", "/", "lessons"], ["Flash cards", "/flashcards", "memrise"], ["Community", "/community", "community"]];
+// Exact icons exported from week 10 › "With this" › Group 26 (18px glyphs)
 const NAV_ICONS = {
-  Home: <path d="M12 2.6c.4 0 .8.15 1.1.42l8.2 7.3c.5.45.2 1.28-.47 1.28H19.6v7.9c0 1-.8 1.8-1.8 1.8H15v-5.2c0-.6-.5-1.1-1.1-1.1h-3.8c-.6 0-1.1.5-1.1 1.1v5.2H6.2c-1 0-1.8-.8-1.8-1.8v-7.9H3.17c-.68 0-1-.83-.48-1.28l8.2-7.3c.32-.27.71-.42 1.11-.42z" />,
-  Lessons: <path d="M2.5 5.6c0-.5.33-.94.8-1.07 2.8-.8 5.6-.45 8.2 1.05v14.1c-2.55-1.35-5.3-1.62-8.2-.82-.4.1-.8-.2-.8-.62zm19 0c0-.5-.33-.94-.8-1.07-2.8-.8-5.6-.45-8.2 1.05v14.1c2.55-1.35 5.3-1.62 8.2-.82.4.1.8-.2.8-.62z" />,
-  "Flash cards": <path d="M8.2 2.5h11a2.3 2.3 0 0 1 2.3 2.3v9.9c0 .7-.5 1.2-1.1 1.3V5.2c0-.6-.5-1.1-1.1-1.1H7c.1-.9.6-1.6 1.2-1.6zM4.8 6.5h11a2.3 2.3 0 0 1 2.3 2.3v10.4a2.3 2.3 0 0 1-2.3 2.3h-11a2.3 2.3 0 0 1-2.3-2.3V8.8a2.3 2.3 0 0 1 2.3-2.3z" />,
-  Community: <g><circle cx="8.8" cy="7.6" r="3.4" /><path d="M2.2 19.2c0-3.5 2.9-5.9 6.6-5.9s6.6 2.4 6.6 5.9c0 .6-.5 1-1 1H3.2c-.6 0-1-.4-1-1z" /><circle cx="16.8" cy="8.4" r="2.7" /><path d="M16.9 13.4c2.9 0 5 1.9 5 4.7 0 .5-.4.9-.9.9h-4.1c.05-2.1-.9-4-2.5-5.2.75-.27 1.6-.4 2.5-.4z" /></g>,
+  Home: { w: 18, h: 17, d: ["M9 0C10.1598 0 11.0933 0.93314 12.96 2.7998L16.3594 6.19922C17.1685 7.00837 17.5739 7.41329 17.7871 7.92773C18.0002 8.44225 18 9.01485 18 10.1592V11.2402C18 13.8798 17.9997 15.1995 17.1797 16.0195C16.5086 16.6907 15.5029 16.8099 13.7129 16.832C13.4913 16.8051 13.3995 16.6974 13.3994 16.5068V12.8398C9.84107 15.6164 6.99744 16.712 3.93555 16.8281C2.36296 16.793 1.44618 16.6454 0.820312 16.0195C0.000252187 15.1995 3.06302e-09 13.8798 1.06638e-09 11.2402V10.1592C2.29412e-09 9.01485 -0.000230491 8.44225 0.212891 7.92773C0.426055 7.41329 0.831472 7.00837 1.64062 6.19922L5.04004 2.7998C6.90671 0.933138 7.8402 3.53183e-09 9 0Z"] },
+  Lessons: { w: 18, h: 15, d: [
+    "M17.9999 10.9706C17.9999 12.0752 17.1045 12.9706 15.9999 12.9706H15.1764C13.3289 12.9706 11.6556 13.4594 9.5293 14.8235V2.94606C9.5293 2.26487 9.87118 1.62112 10.4673 1.29153C12.167 0.351866 13.609 0 15.1764 0H15.9999C17.1045 0 17.9999 0.895431 17.9999 2V10.9706Z",
+    "M0.000114441 10.9706C0.000114441 12.0752 0.895545 12.9706 2.00011 12.9706H2.82364C4.67107 12.9706 6.34443 13.4594 8.4707 14.8235V2.94606C8.4707 2.26487 8.12882 1.62112 7.53268 1.29153C5.83305 0.351866 4.39099 0 2.82364 0H2.00011C0.895545 0 0.000114441 0.895431 0.000114441 2V10.9706Z"] },
+  "Flash cards": { w: 18, h: 18, d: [
+    "M10.9951 16.002C10.9289 16.0005 10.8614 16 10.7939 16C9.00562 16.0001 7.38542 16.5277 5.32715 18V16.167C5.32715 16.0559 5.25954 16 5.09082 16H5C2.64298 16 1.46465 15.9998 0.732422 15.2676C0.000188828 14.5353 0 13.357 0 11V9C0 6.64298 0.000188828 5.46465 0.732422 4.73242C1.46465 4.00019 2.64298 4 5 4H10C12.357 4 13.5353 4.00019 14.2676 4.73242C14.9998 5.46465 15 6.64298 15 9V11C15 13.357 14.9998 14.5353 14.2676 15.2676C13.5353 15.9998 12.357 16 10 16H11L10.9951 16.002Z",
+    "M10 4C12.357 4 13.5353 4.00019 14.2676 4.73242C14.9998 5.46465 15 6.64298 15 9V11C15 11.3478 14.9985 11.6699 14.9961 11.9688C14.4442 11.9961 13.7881 12 13 12H8C5.64298 12 4.46465 11.9998 3.73242 11.2676C3.00019 10.5353 3 9.35702 3 7V5C3 4.65182 3.00056 4.32937 3.00293 4.03027C3.55504 4.00283 4.21149 4 5 4H10ZM13 0C15.357 0 16.5353 0.000190259 17.2676 0.732422C17.9998 1.46465 18 2.64298 18 5V7C18 9.35702 17.9998 10.5353 17.2676 11.2676C16.949 11.5862 16.5458 11.7655 15.998 11.8672C15.9997 11.5912 16 11.302 16 11V9C16 7.84993 16.002 6.88685 15.8994 6.12402C15.7929 5.33235 15.5574 4.60822 14.9746 4.02539C14.3918 3.44256 13.6677 3.20709 12.876 3.10059C12.1132 2.99802 11.1501 3 10 3H5C4.26567 3 3.60771 3.0022 3.0293 3.02832C3.08264 1.9152 3.2414 1.22344 3.73242 0.732422C4.46465 0.00018914 5.64298 0 8 0H13Z"] },
+  Community: { w: 18, h: 15, d: [
+    "M2 3C2 3.79565 2.31607 4.55871 2.87868 5.12132C3.44129 5.68393 4.20435 6 5 6C5.79565 6 6.55871 5.68393 7.12132 5.12132C7.68393 4.55871 8 3.79565 8 3C8 2.20435 7.68393 1.44129 7.12132 0.87868C6.55871 0.31607 5.79565 0 5 0C4.20435 0 3.44129 0.31607 2.87868 0.87868C2.31607 1.44129 2 2.20435 2 3Z",
+    "M10 3C10 3.79565 10.3161 4.55871 10.8787 5.12132C11.4413 5.68393 12.2044 6 13 6C13.7956 6 14.5587 5.68393 15.1213 5.12132C15.6839 4.55871 16 3.79565 16 3C16 2.20435 15.6839 1.44129 15.1213 0.87868C14.5587 0.31607 13.7956 0 13 0C12.2044 0 11.4413 0.31607 10.8787 0.87868C10.3161 1.44129 10 2.20435 10 3Z",
+    "M0 14.9999V11.7272C0 7.96357 3.27273 6.81812 6.87273 6.81812H11.1273C14.7273 6.81812 18 7.96357 18 11.7272V14.9999H0Z"] },
 };
-// Floating iOS-style glass tab bar
+// Tab centres inside the 384×68 bar (from Figma)
+const TAB_X = [57.4, 145.75, 231.1, 317];
+
+// Floating glass tab bar — week 10 "With this": 384×68 at left 18, #E1DED1 @70%, r20 / 100% smoothing, Glass effect.
 export function NavNew({ active }) {
-  const W = 384, H = 66;
+  const W = 384, H = 68;
   return (
-    <nav style={{ position: "absolute", left: 18, bottom: 28, width: W, height: H, zIndex: 5, clipPath: squircle(W, H, 30), borderRadius: 30,
-      background: "rgba(214, 209, 194, 0.62)", backdropFilter: "blur(22px) saturate(1.6)", WebkitBackdropFilter: "blur(22px) saturate(1.6)",
-      boxShadow: "inset 0 0 0 1px rgba(255,255,255,.55)", display: "flex" }}>
-      {TABS.map(([name, href, label]) => {
-        const on = name === active;
-        const c = on ? "var(--plum)" : "#ffffff";
-        return (
-          <Link key={name} href={href} aria-current={on ? "page" : undefined}
-            style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 13, gap: 3, color: c, transition: "color .2s" }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">{NAV_ICONS[name]}</svg>
-            <T font="dm" size={10} weight={500} color={c} lh={13}>{label}</T>
-          </Link>
-        );
-      })}
-    </nav>
+    <>
+      {/* bottom fade behind the bar (Figma "Rectangle 52") */}
+      <div aria-hidden style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 142, zIndex: 4, pointerEvents: "none",
+        background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FEFFF8 71%, #FEFFF8 100%)" }} />
+      <nav style={{ position: "absolute", left: 18, bottom: 25, width: W, height: H, zIndex: 5, clipPath: squircle(W, H, 20), borderRadius: 20,
+        background: "rgba(225, 222, 209, 0.7)", backdropFilter: "blur(4px) saturate(1.5)", WebkitBackdropFilter: "blur(4px) saturate(1.5)",
+        boxShadow: "inset 1.5px 1.5px 0 rgba(255,255,255,.7), inset -1px -1px 0 rgba(255,255,255,.3)" }}>
+        {TABS.map(([name, href, label], i) => {
+          const on = name === active;
+          const c = on ? "#430B27" : "#FEFFF8";
+          const ic = NAV_ICONS[name];
+          return (
+            <Link key={name} href={href} aria-current={on ? "page" : undefined}
+              style={{ position: "absolute", left: TAB_X[i] - 40, top: 0, width: 80, height: H, color: c }}>
+              <svg width={ic.w} height={ic.h} viewBox={`0 0 ${ic.w} ${ic.h}`} fill="currentColor"
+                style={{ position: "absolute", left: 40 - ic.w / 2, top: 37.5 - ic.h }}>
+                {ic.d.map((d, k) => <path key={k} d={d} />)}
+              </svg>
+              <span style={{ position: "absolute", left: 0, top: 40, width: 80, textAlign: "center", fontFamily: "var(--dm)", fontSize: 9, fontWeight: 500,
+                letterSpacing: "-0.02em", lineHeight: "12px", color: c }}>{label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 }
 
