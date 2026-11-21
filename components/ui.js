@@ -8,7 +8,7 @@ import { NavIcon, Svg, DECK_BUBBLE } from "./Shapes";
 
 // ---------- primitives (Figma coordinates, 420 × 912) ----------
 
-const FONTS = { serif: "var(--serif)", columba: "var(--columba)", dm: "var(--dm)", inter: "var(--inter)", ko: "var(--ko)" };
+const FONTS = { serif: "var(--serif)", columba: "var(--columba)", dm: "var(--dm)", ko: "var(--ko)" };
 
 // iOS-style continuous corners (Figma corner smoothing 100%, as in the week 10 frames) for any fixed-size rounded box.
 export function squircle(w, h, r) {
@@ -19,7 +19,7 @@ export function Box({ x, y, w, h, r, bg, style, children, ...rest }) {
   return <div {...rest} style={{ position: "absolute", left: x, top: y, width: w, height: h, borderRadius: r, clipPath: squircle(w, h, r), background: bg, ...style }}>{children}</div>;
 }
 
-// Text: font = serif | columba | dm | inter | ko ; size px ; lh px or % string ; w for wrapping/alignment.
+// Text: font = serif | columba | dm | ko ; size px ; lh px or % string ; w for wrapping/alignment.
 export function T({ x, y, w, font = "dm", size = 15, weight = 400, color = "var(--ink-soft)", lh = "normal", ls, align, italic, style, children, as: Tag = "div", ...rest }) {
   return (
     <Tag {...rest} style={{
@@ -150,7 +150,7 @@ export function Chip({ x, y, label, kind = "accent", style }) {
 export function BackLink({ x, y, href = "/", color = "var(--ink-soft)", label = "back" }) {
   return (
     <Link href={href} style={{ position: "absolute", left: x, top: y, height: 24, display: "flex", alignItems: "center", gap: 8, color }}>
-      <T font="inter" size={20} color={color} lh={24}>←</T>
+      <T font="dm" size={20} color={color} lh={24}>←</T>
       <T font="dm" size={15} color={color} lh={20}>{label}</T>
     </Link>
   );

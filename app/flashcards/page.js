@@ -23,7 +23,7 @@ export default function FlashCards() {
         <Box x={22} y={222} w={376} h={68} r={34} bg="var(--yellow)" />
         <T x={46} y={240} font="serif" size={26} lh={26} color="var(--plum)">12 due today</T>
         <Box x={326} y={232} w={48} h={48} r={24} bg="var(--plum)" />
-        <T x={326} y={240} w={48} font="inter" size={22} weight={500} lh={27} align="center" color="var(--paper)">→</T>
+        <T x={326} y={240} w={48} font="dm" size={22} weight={500} lh={27} align="center" color="var(--paper)">→</T>
       </Link>
       {DECKS.map((d) => <DeckBubble key={d.t} x={d.x} y={d.y} color={d.c} title={d.t} count={d.n} opacity={d.op} href={d.href} />)}
     </Screen>

@@ -111,7 +111,7 @@ export default function Home() {
                 <Photo x={x} y={0} w={292} h={241} r={20} src={c.src} style={{ scrollSnapAlign: "start" }} />
                 <Box x={x} y={0} w={292} h={241} r={20} style={{ background: FADE }} />
                 <Box x={x + 16} y={16} w={tagW} h={24} r={12} bg="#fefff8" />
-                <T x={x + 16} y={22} w={tagW} font="inter" size={10} weight={600} lh={12} align="center" color="#430b27">{c.tag}</T>
+                <T x={x + 16} y={22} w={tagW} font="dm" size={10} weight={600} lh={12} align="center" color="#430b27">{c.tag}</T>
                 <T x={x + 16} y={c.title.includes("\n") ? 177 : 199} font="serif" size={24} lh={c.title.includes("\n") ? "95%" : 31} color="#ffffff">{c.title}</T>
               </>
             );
@@ -135,7 +135,7 @@ export default function Home() {
       <T x={236} y={849} font="serif" size={24} lh="120%" color="#ffffff">{`${seoul.day}\n${seoul.time}\n6°C`}</T>
 
       {/* Trip readiness */}
-      <T x={32} y={970} font="inter" size={15} weight={500} lh={18} color="#7e7e7e">Trip readiness</T>
+      <T x={32} y={970} font="dm" size={15} weight={500} lh={18} color="#7e7e7e">Trip readiness</T>
       <Box x={31} y={999} w={366} h={232} r={20} bg="#fefff8" />
       <T x={51} y={1028} font="serif" size={40} lh="100%" color="#430b27">60%</T>
       <T x={140} y={1035} font="serif" size={25} lh="100%" color="#430b27">ready for Seoul</T>

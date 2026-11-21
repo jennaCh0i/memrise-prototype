@@ -19,19 +19,19 @@ export default function Community() {
 
       <Svg x={22} y={226} w={376} h={198} d={LIVE_BUBBLE} fill="#DDD9C9" />
       <Box x={44} y={251} w={8} h={8} r={4} bg="var(--plum)" />
-      <T x={58} y={245} font="inter" size={13} weight={500} lh={16} color="var(--plum)">Live now</T>
+      <T x={58} y={245} font="dm" size={13} weight={500} lh={16} color="var(--plum)">Live now</T>
       <T x={44} y={268} font="serif" size={26} lh={26} color="#1f1d1c">Korean speaking room</T>
       {[ME, P2, P3].map((s, i) => <Avatar key={i} x={44 + i * 22} y={326} size={34} src={s} />)}
-      <T x={134} y={334} font="inter" size={14} lh={17} color="#8a857e">13 learners</T>
+      <T x={134} y={334} font="dm" size={14} lh={17} color="#8a857e">13 learners</T>
       <Button x={273} y={323} small kind="brand" label="Join" href="/community/live" />
 
-      <T x={24} y={450} font="inter" size={13} weight={500} lh={16} color="#8a857e">Questions</T>
+      <T x={24} y={450} font="dm" size={13} weight={500} lh={16} color="#8a857e">Questions</T>
       {QS.map((q) => (
         <div key={q.y}>
           <Avatar x={24} y={q.y} size={32} src={q.av} />
-          <T x={66} y={q.y + 8} font="inter" size={13} lh={16} color="#8a857e">{q.who}</T>
-          <T x={24} y={q.y + 46} w={372} font="inter" size={17} weight={500} lh="135%" color="#1f1d1c">{q.q}</T>
-          <T x={24} y={q.y + 104} font="inter" size={13} lh={16} color="#8a857e">{q.meta}</T>
+          <T x={66} y={q.y + 8} font="dm" size={13} lh={16} color="#8a857e">{q.who}</T>
+          <T x={24} y={q.y + 46} w={372} font="dm" size={17} weight={500} lh="135%" color="#1f1d1c">{q.q}</T>
+          <T x={24} y={q.y + 104} font="dm" size={13} lh={16} color="#8a857e">{q.meta}</T>
           <Box x={24} y={q.y + 136} w={372} h={1} bg="#e8e5de" />
         </div>
       ))}
