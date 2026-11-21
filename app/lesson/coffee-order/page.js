@@ -54,7 +54,7 @@ export default function SituationDetail() {
           <T font="dm" size={15} weight={500} color="var(--paper)">Scene 2 is next in the prototype ☕</T>
         </div>
       )}
-      <Button x={24} y={814} label="Start scene 2" onClick={() => { setToast(true); setTimeout(() => setToast(false), 2400); }} />
+      <Button x={24} y={814} label="Start scene 2" href="/lesson/coffee-order/scene-2" />
     </Screen>
   );
 }
