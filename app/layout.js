@@ -4,14 +4,15 @@ import Phone from "@/components/Phone";
 export const metadata = {
   title: "Memrise · Korean for real life",
   description: "Week 9 prototype — Memrise rebrand by Jenna Choi",
-  appleWebApp: { capable: true, title: "Memrise", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Memrise", statusBarStyle: "black-translucent" },
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#f3f4ef",
+  viewportFit: "cover",
+  themeColor: "#ffcf00",
 };
 
 export default function RootLayout({ children }) {
