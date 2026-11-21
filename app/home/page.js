@@ -1,14 +1,21 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Screen, Box, T, Photo, Avatar, ME } from "@/components/ui";
 import { Svg, HOME_HEADER, Wordmark } from "@/components/Shapes";
 
 // Tab / Home — week 10 › "With this content" (420 × 1349). Positions, sizes and colours from Figma.
-const DATES = [
-  { x: -43 }, { x: 31, t: "Oct\n23" }, { x: 106, t: "Oct\n24", today: true },
-  { x: 180, t: "Oct\n25" }, { x: 254, t: "Oct\n26" }, { x: 328, t: "Oct\n27" }, { x: 402 },
-];
+// Calendar strip: day 1 (Sep 13) → today, Oct 24 (day 42) → the trip (Nov 11). Scrolls sideways;
+// the date sitting in the highlighted slot (x 106, as in Figma) is selected and drives the big number.
+const DAY1 = new Date(2026, 8, 13);
+const TODAY_INDEX = 41; // Oct 24 = day 42
+const TOTAL = 60;      // up to Nov 11
+const STEP = 74;       // pill spacing in the Figma frame
+const SLOT_X = 106;    // where the selected pill sits
+const DATES = Array.from({ length: TOTAL }, (_, i) => {
+  const d = new Date(DAY1); d.setDate(DAY1.getDate() + i);
+  return { i, label: `${d.toLocaleString("en-US", { month: "short" })}\n${d.getDate()}` };
+});
 const LESSON_CARDS = [
   { tag: "TODAY · DAY 13", title: "coffee order", src: "/images/barista.jpg", href: "/lesson/coffee-order/make-it-yours" },
   { tag: "TOMORROW · DAY 12", title: "T-money\ntop-up", src: "/images/tmoney.jpg" },
@@ -40,27 +47,49 @@ function useSeoulTime() {
   return now || { day: "Sat", time: "10:41 AM" };
 }
 
+function DateStrip({ onSelect }) {
+  const ref = useRef(null);
+  const [sel, setSel] = useState(TODAY_INDEX);
+  useEffect(() => { if (ref.current) ref.current.scrollLeft = TODAY_INDEX * STEP; }, []);
+  const onScroll = () => {
+    const i = Math.max(0, Math.min(TOTAL - 1, Math.round(ref.current.scrollLeft / STEP)));
+    if (i !== sel) { setSel(i); onSelect(i); }
+  };
+  return (
+    <div ref={ref} onScroll={onScroll} className="hscroll"
+      style={{ position: "absolute", left: 0, top: 353, width: 420, height: 72, scrollSnapType: "x mandatory", scrollPaddingLeft: SLOT_X }}>
+      <div style={{ position: "relative", width: (TOTAL - 1) * STEP + 420, height: 72 }}>
+        {DATES.map((d) => {
+          const x = SLOT_X + d.i * STEP;
+          const on = d.i === sel;
+          return (
+            <div key={d.i} onClick={() => ref.current.scrollTo({ left: d.i * STEP, behavior: "smooth" })} style={{ cursor: "pointer" }}>
+              <Box x={x} y={0} w={63} h={56} r={20} bg={on ? "#ffcf00" : "#430b27"} style={{ scrollSnapAlign: "start", transition: "background .15s" }} />
+              <T x={x + 12} y={8} w={39} font="serif" size={20} lh="95%" align="center" color={on ? "#2a2a28" : "#fefff8"}>{d.label}</T>
+              {d.i <= TODAY_INDEX && <Box x={x + 28} y={63} w={6} h={6} r={3} bg="#2a2a28" />}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const seoul = useSeoulTime();
+  const [day, setDay] = useState(TODAY_INDEX + 1);
   return (
     <Screen bg="#f7f6f2" nav="Home" height={1349}>
       <Svg w={420} h={337} d={HOME_HEADER} fill="#FFCF00" />
       <Wordmark />
       <Avatar x={348} y={90} size={49} src={ME} />
       <div style={{ position: "absolute", left: 26, top: 115, lineHeight: "112px", whiteSpace: "pre", color: "#2a2a28" }}>
-        <span style={{ fontFamily: "var(--columba)", fontSize: 80 }}>42</span>
+        <span style={{ fontFamily: "var(--columba)", fontSize: 80 }}>{day}</span>
         <span style={{ fontFamily: "var(--columba)", fontSize: 35 }}> </span>
-        <span style={{ fontFamily: "var(--serif)", fontSize: 35 }}>days</span>
+        <span style={{ fontFamily: "var(--serif)", fontSize: 35 }}>{day === 1 ? "day" : "days"}</span>
       </div>
 
-      {DATES.map((d) => (
-        <div key={d.x}>
-          <Box x={d.x} y={353} w={63} h={56} r={20} bg={d.today ? "#ffcf00" : "#430b27"} />
-          {d.t && <T x={d.x + 12} y={361} w={39} font="serif" size={20} lh="95%" align="center" color={d.today ? "#2a2a28" : "#fefff8"}>{d.t}</T>}
-        </div>
-      ))}
-      <Box x={59} y={416} w={6} h={6} r={3} bg="#2a2a28" />
-      <Box x={134} y={416} w={6} h={6} r={3} bg="#2a2a28" />
+      <DateStrip onSelect={(i) => setDay(i + 1)} />
 
       {/* Lessons — cards scroll sideways */}
       {sectionLabel(37, 449, "Lessons")}
