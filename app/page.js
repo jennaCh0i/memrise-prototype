@@ -84,11 +84,9 @@ export default function Lessons() {
             const tile = l.special ? (
               <>
                 <Box x={x} y={0} w={226} h={106} r={20} bg="#b1c2fa" style={{ scrollSnapAlign: "start" }} />
-                <T x={x + 14} y={11} w={200} font="serif" size={22} lh={22} color="#430b27">the big recap</T>
-                <T x={x + 14} y={37} w={160} font="dm" size={12} lh={16} color="#430b27">every lesson, one last run-through before you fly</T>
-                <Box x={x + 14} y={76} w={56} h={20} r={10} bg="#ffcf00" />
-                <T x={x + 14} y={79} w={56} font="dm" size={11} weight={600} lh={14} align="center" color="#430b27">D-DAY</T>
-                <T x={x + 132} y={79} w={82} font="dm" size={14} lh="140%" color="#430b27" align="right">day 0 ✈</T>
+                <T x={x + 12} y={12} w={202} font="serif" size={22} lh={22} color="#430b27">the big recap</T>
+                <Box x={x + 12} y={106 - 12 - 24} w={66} h={24} r={12} bg="#ffcf00" />
+                <T x={x + 12} y={106 - 12 - 24 + 4} w={66} font="dm" size={12} weight={600} lh={16} align="center" color="#430b27">day 0 ✈</T>
               </>
             ) : (
               <>
