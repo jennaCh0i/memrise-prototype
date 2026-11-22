@@ -292,6 +292,8 @@ function Done() {
 export default function Scene2() {
   const router = useRouter();
   const [step, setStep] = useState(0);
+  // ?step=N opens a step directly (used by the desktop shortcuts)
+  useEffect(() => { const n = parseInt(new URLSearchParams(window.location.search).get("step"), 10); if (n >= 0 && n <= 5) setStep(n); }, []);
   const next = () => setStep((s) => s + 1);
   const back = () => (step === 0 ? router.push("/lesson/coffee-order") : setStep((s) => s - 1));
   const Steps = [Listen, Speak, Build, Slowly, Curveball, Done];
