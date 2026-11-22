@@ -10,6 +10,9 @@ import { LESSONS as BASE, TODAY } from "@/lib/lessons";
 // "day N" and big title above switch to that lesson. Tap a tile to jump to it; tap the
 // selected tile again to open the lesson (where there is one).
 const HERO = {
+  "subway\nride": { name: "Subway ride", src: "/images/hero-subway.jpg", x: -41 },
+  "convenience\nstore": { name: "Convenience store", src: "/images/hero-convenience.jpg", x: -41 },
+  "street\nfood": { name: "Street food", src: "/images/hero-streetfood.jpg", x: -41 },
   "coffee\norder": { name: "Coffee order", src: "/images/barista.jpg", x: -41 },
   "T-money\ntop-up": { name: "T-money", src: "/images/hero-tmoney.jpg", x: -41 },
   pharmacy: { name: "Pharmacy", src: "/images/hero-pharmacy.jpg", x: -81 },
