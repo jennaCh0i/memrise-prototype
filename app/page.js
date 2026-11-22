@@ -90,8 +90,9 @@ export default function Lessons() {
             ) : (
               <>
                 <Box x={x} y={0} w={106} h={106} r={20} bg={bg} style={{ scrollSnapAlign: "start", transition: "background .15s" }} />
-                <T x={x + 12} y={11} w={86} font="serif" size={16} lh="100%" color={fg}>{l.title}</T>
-                <T x={x + 12} y={79} w={82} font="dm" size={14} lh="140%" color={fg} align="right">{`day ${l.day}`}</T>
+                {/* even 12px margin on all four sides; long words step down a size so they never touch the edge */}
+                <T x={x + 12} y={12} w={82} font="serif" size={l.title.split("\n").some((w) => w.length > 9) ? 14 : 16} lh="100%" color={fg} style={{ overflowWrap: "anywhere" }}>{l.title}</T>
+                <T x={x + 12} y={106 - 12 - 17} w={82} font="dm" size={14} lh={17} color={fg} align="right">{`day ${l.day}`}</T>
               </>
             );
             // Each tile is its own sized box so nothing shifts while the strip is being swiped.
