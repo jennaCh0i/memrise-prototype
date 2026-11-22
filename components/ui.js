@@ -88,7 +88,7 @@ const NAV_ICONS = {
 // Tab centres inside the 384×68 bar (from Figma)
 const TAB_X = [57.4, 145.75, 231.1, 317];
 
-// Floating glass tab bar — week 10 "With this": 384×68 at left 18, #E1DED1 @85%, r20 / 100% smoothing (light glass).
+// Floating glass tab bar — week 10 "With this": 384×68 at left 18, #F3F4EF @85%, unselected tabs mist #A3A3A3, r20 / 100% smoothing (light glass).
 export function NavNew({ active }) {
   const W = 384, H = 68;
   return (
@@ -97,10 +97,10 @@ export function NavNew({ active }) {
       <div aria-hidden style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 142, zIndex: 4, pointerEvents: "none",
         background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FEFFF8 71%, #FEFFF8 100%)" }} />
       <nav style={{ position: "absolute", left: 18, bottom: 25, width: W, height: H, zIndex: 5, clipPath: squircle(W, H, 20), borderRadius: 20,
-        background: "rgba(225, 222, 209, 0.85)", backdropFilter: "blur(2px) saturate(1.15)", WebkitBackdropFilter: "blur(2px) saturate(1.15)" }}>
+        background: "rgba(243, 244, 239, 0.85)", backdropFilter: "blur(2px) saturate(1.15)", WebkitBackdropFilter: "blur(2px) saturate(1.15)" }}>
         {TABS.map(([name, href, label], i) => {
           const on = name === active;
-          const c = on ? "#430B27" : "#FEFFF8";
+          const c = on ? "#430B27" : "#A3A3A3"; // unselected = mist
           const ic = NAV_ICONS[name];
           return (
             <Link key={name} href={href} aria-current={on ? "page" : undefined}
