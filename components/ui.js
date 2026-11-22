@@ -238,16 +238,23 @@ export function MenuRow({ x, y, word, meaning, full, due, onClick, on }) {
   );
 }
 
-export function DeckBubble({ x, y, color, title, count, opacity, href }) {
+export function DeckBubble({ x, y, color, title, count, opacity, href, ink = "var(--plum)", locked }) {
   const inner = (
     <>
       <Svg w={184} h={164} d={DECK_BUBBLE} fill={color} />
-      <T x={20} y={18} w={150} font="serif" size={24} lh={24} color="var(--plum)">{title}</T>
-      {count && <T x={124} y={78} w={44} font="serif" size={44} lh={44} align="right" color="var(--plum)">{count}</T>}
+      {title && <T x={20} y={18} w={150} font="serif" size={24} lh={24} color={ink}>{title}</T>}
+      {count && <T x={124} y={78} w={44} font="serif" size={44} lh={44} align="right" color={ink}>{count}</T>}
+      {locked && (
+        // icon-24/lock (week 10 flash cards), centred in the bubble
+        <svg width="39" height="39" viewBox="0 0 39 39" style={{ position: "absolute", left: 73, top: 51 }} aria-label="locked">
+          <path d="M7.94211 18.6762V15.2725C7.94211 12.495 9.04548 9.83121 11.0095 7.8672C12.9735 5.90318 15.6373 4.7998 18.4148 4.7998C21.1924 4.7998 23.8562 5.90318 25.8202 7.8672C27.7842 9.83121 28.8876 12.495 28.8876 15.2725V18.6762H24.1748V15.2725C24.1748 13.7449 23.568 12.2798 22.4878 11.1996C21.4076 10.1194 19.9425 9.51253 18.4148 9.51253C16.8872 9.51253 15.4221 10.1194 14.3419 11.1996C13.2617 12.2798 12.6548 13.7449 12.6548 15.2725V18.6762H7.94211Z" fill="#8A857E" />
+          <path d="M8.72757 16.3198H28.1021C30.7203 16.3198 32.0294 17.6289 32.0294 20.2471V28.6253C32.0294 31.2434 30.7203 32.5525 28.1021 32.5525H8.72757C6.10938 32.5525 4.80029 31.2434 4.80029 28.6253V20.2471C4.80029 17.6289 6.10938 16.3198 8.72757 16.3198Z" fill="#524D48" />
+        </svg>
+      )}
     </>
   );
   const s = { position: "absolute", left: x, top: y, width: 184, height: 164, opacity, display: "block" };
-  return href ? <Link href={href} className="press" style={s}>{inner}</Link> : <div style={s}>{inner}</div>;
+  return href ? <Link href={href} style={s}>{inner}</Link> : <div style={s}>{inner}</div>;
 }
 
 export function GameCard({ x, y, color, ko, en, meta }) {
