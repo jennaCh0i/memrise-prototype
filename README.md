@@ -30,7 +30,7 @@ npm run dev
 
 ## Fonts
 - **FAIRE Octave** — all serif text (`--font-serif`)
-- **Columba Text** — numbers. Loaded as "Columba Numerals" with a digits-only unicode-range, so any number inside serif text switches to Columba automatically.
+- **Faustina** — all numbers (Google Fonts, SIL Open Font License). Loaded as "Faustina Numerals" with a digits-only unicode-range, so any number inside serif text uses Faustina automatically.
 - DM Sans + Noto Sans KR (Google Fonts) for UI text and Korean.
 
-Columba Text is a **trial** font (and check FAIRE Octave's licence too): fine for a class or portfolio prototype, but buy a web licence before using it on a public product.
+Check FAIRE Octave's licence: fine for a class or portfolio prototype, but buy a web licence before using it on a public product.

@@ -1,16 +1,18 @@
 /* Memrise week 9 prototype — built 1:1 from the Figma screens (420 × 912 design units).
-   Fonts: FAIRE Octave (serif text), Columba Text (numbers + Columba headlines), DM Sans, Noto Sans KR. */
+   Fonts: FAIRE Octave (serif text), Faustina (all numbers), DM Sans, Noto Sans KR. */
 
+/* Numbers: Faustina (variable, Google Fonts / OFL). "Faustina Numerals" only covers digits,
+   so any serif text gets Faustina numbers automatically. */
 @font-face {
-  font-family: "Columba Numerals";
-  src: url("/fonts/ColumbaText-Regular.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
+  font-family: "Faustina Numerals";
+  src: url("/fonts/Faustina-Variable.woff2") format("woff2-variations"), url("/fonts/Faustina-Variable.woff2") format("woff2");
+  font-weight: 300 800; font-style: normal; font-display: swap;
   unicode-range: U+0030-0039;
 }
 @font-face {
-  font-family: "Columba Text";
-  src: url("/fonts/ColumbaText-Regular.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
+  font-family: "Faustina";
+  src: url("/fonts/Faustina-Variable.woff2") format("woff2-variations"), url("/fonts/Faustina-Variable.woff2") format("woff2");
+  font-weight: 300 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: "FAIRE Octave";
@@ -37,8 +39,8 @@
   --ink-soft: #2a2a28;
   --tomato: #ec4e32;
 
-  --serif: "Columba Numerals", "FAIRE Octave", Georgia, serif;
-  --columba: "Columba Text", "FAIRE Octave", Georgia, serif;
+  --serif: "Faustina Numerals", "FAIRE Octave", Georgia, serif;
+  --columba: "Faustina", "FAIRE Octave", Georgia, serif; /* numbers-only text (kept the old variable name) */
   --dm: "DM Sans", "Noto Sans KR", system-ui, sans-serif;
   --ko: "Noto Sans KR", "DM Sans", sans-serif;
 }
