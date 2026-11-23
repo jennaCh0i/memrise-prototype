@@ -1,4 +1,5 @@
 "use client";
+import { type } from "@/lib/type";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Screen, Box, T, Photo, Avatar, ME } from "@/components/ui";
@@ -98,12 +99,12 @@ export default function Home() {
       <Avatar x={348} y={90} size={49} src={ME} />
       <div style={{ position: "absolute", left: 26, top: 115, lineHeight: "112px", whiteSpace: "pre", color: "#2a2a28" }}>
         {left === 0 ? (
-          <span style={{ fontFamily: "var(--serif)", fontSize: 80 }}>D-day</span>
+          <span style={{ fontFamily: "var(--serif)", ...type("serif", 80) }}>D-day</span>
         ) : (
           <>
-            <span style={{ fontFamily: "var(--columba)", fontSize: 80 }}>{left}</span>
-            <span style={{ fontFamily: "var(--columba)", fontSize: 35 }}> </span>
-            <span style={{ fontFamily: "var(--serif)", fontSize: 35 }}>{left === 1 ? "day" : "days"}</span>
+            <span style={{ fontFamily: "var(--columba)", ...type("columba", 80) }}>{left}</span>
+            <span style={{ fontFamily: "var(--columba)", ...type("columba", 34) }}> </span>
+            <span style={{ fontFamily: "var(--serif)", ...type("serif", 34) }}>{left === 1 ? "day" : "days"}</span>
           </>
         )}
       </div>

@@ -1,4 +1,5 @@
 "use client";
+import { type } from "@/lib/type";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -93,7 +94,7 @@ function Listen({ next, back }) {
 
       <Wave x={40} y={465} played={played} />
       <div style={{ position: "absolute", left: 35, top: 528 }}><ListenIcon c={PLUM} size={18} /></div>
-      <div style={{ position: "absolute", left: 77, top: 505, fontFamily: "var(--ko)", fontSize: 40, lineHeight: "56px", whiteSpace: "nowrap" }}>
+      <div style={{ position: "absolute", left: 77, top: 505, fontFamily: "var(--ko)", ...type("ko", 40), whiteSpace: "nowrap" }}>
         {["라떼 ", "한 잔 ", "주세요."].map((w, i) => <span key={i} style={{ color: i < lit ? "#2a2a28" : "#cacaca", transition: "color .2s" }}>{w}</span>)}
       </div>
       <T x={83} y={581} font="dm" size={18} lh={23} color="#838383">latte han jan juseyo</T>
@@ -138,7 +139,7 @@ function Speak({ next, back }) {
       </div>
 
       {WORDS.map(([, ro, x]) => <T key={ro} x={x} y={474} font="dm" size={14} lh={18} color="rgba(254,255,248,.55)">{ro}</T>)}
-      <div style={{ position: "absolute", left: 24, top: 490, fontFamily: "var(--ko)", fontSize: 40, lineHeight: "56px", whiteSpace: "nowrap" }}>
+      <div style={{ position: "absolute", left: 24, top: 490, fontFamily: "var(--ko)", ...type("ko", 40), whiteSpace: "nowrap" }}>
         {WORDS.map(([ko], i) => (
           <span key={ko} style={{ color: i < lit ? YELLOW : i === 0 && lit === 0 ? YELLOW : PAPER, fontWeight: i < Math.max(lit, 1) ? 700 : 400, opacity: i < Math.max(lit, 1) ? 1 : 0.5, transition: "all .2s" }}>{ko}{i < 3 ? " " : ""}</span>
         ))}

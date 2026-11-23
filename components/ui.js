@@ -1,5 +1,6 @@
 "use client";
 import { getSvgPath } from "figma-squircle";
+import { type } from "@/lib/type";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePhone } from "./Phone";
@@ -24,8 +25,13 @@ export function T({ x, y, w, font = "dm", size = 15, weight = 400, color = "var(
   return (
     <Tag {...rest} style={{
       position: x === undefined ? "static" : "absolute", left: x, top: y, width: w,
-      fontFamily: FONTS[font], fontSize: size, fontWeight: weight, color, lineHeight: typeof lh === "number" ? `${lh}px` : lh,
-      letterSpacing: ls, textAlign: align, fontStyle: italic ? "italic" : undefined,
+      // Size, line height and letter-spacing always come from the type system (lib/type.js).
+      fontFamily: FONTS[font], fontWeight: weight, color,
+      ...type(font, size, {
+        stacked: (font === "serif" || font === "columba") && typeof children === "string" && children.includes("\n"),
+        caps: typeof ls === "string" && parseFloat(ls) >= 0.03,
+      }),
+      textAlign: align, fontStyle: italic ? "italic" : undefined,
       whiteSpace: w ? "pre-wrap" : "pre", ...style,
     }}>{children}</Tag>
   );
@@ -109,8 +115,7 @@ export function NavNew({ active }) {
                 style={{ position: "absolute", left: 40 - ic.w / 2, top: 37.5 - ic.h }}>
                 {ic.d.map((d, k) => <path key={k} d={d} />)}
               </svg>
-              <span style={{ position: "absolute", left: 0, top: 40, width: 80, textAlign: "center", fontFamily: "var(--dm)", fontSize: 9, fontWeight: 500,
-                letterSpacing: "-0.02em", lineHeight: "12px", color: c }}>{label}</span>
+              <span style={{ position: "absolute", left: 0, top: 40, width: 80, textAlign: "center", fontFamily: "var(--dm)", fontWeight: 500, ...type("dm", 10, { tab: true }), color: c }}>{label}</span>
             </Link>
           );
         })}
@@ -132,7 +137,7 @@ export function Button({ x, y, w = 372, label, kind = "dark", small, href, onCli
     position: x === undefined ? "relative" : "absolute", left: x, top: y,
     height: small ? 40 : 56, width: small ? "auto" : w, padding: small ? "0 20px" : "0 24px",
     borderRadius: 999, display: "inline-flex", alignItems: "center", justifyContent: "center",
-    fontFamily: "var(--dm)", fontSize: 15, fontWeight: 500, whiteSpace: "nowrap", ...BTN[kind], ...style,
+    fontFamily: "var(--dm)", ...type("dm", 15), fontWeight: 500, whiteSpace: "nowrap", ...BTN[kind], ...style,
   };
   return href ? <Link href={href} className="press" style={s}>{label}</Link>
     : <button className="press" style={s} onClick={onClick} disabled={disabled}>{label}</button>;
@@ -142,7 +147,7 @@ export function Chip({ x, y, label, kind = "accent", style }) {
   const k = { accent: ["var(--yellow)", "var(--plum)"], brand: ["var(--plum)", "var(--paper)"], tag: ["var(--paper)", "var(--plum)"] }[kind];
   return (
     <span style={{ position: x === undefined ? "relative" : "absolute", left: x, top: y, height: 28, padding: "0 12px", borderRadius: 999, background: k[0], color: k[1], display: "inline-flex", alignItems: "center", whiteSpace: "nowrap",
-      fontFamily: "var(--dm)", ...(kind === "tag" ? { fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" } : { fontSize: 13 }), ...style }}>{label}</span>
+      fontFamily: "var(--dm)", ...(kind === "tag" ? { ...type("dm", 11, { caps: true }), fontWeight: 600, textTransform: "uppercase" } : type("dm", 13)), ...style }}>{label}</span>
   );
 }
 
@@ -159,7 +164,7 @@ export function Segmented({ x, y, value }) {
   const item = (name, href) => {
     const on = value === name;
     return (
-      <Link href={href} style={{ height: 32, padding: "0 16px", borderRadius: 999, display: "grid", placeItems: "center", background: on ? "var(--plum)" : "transparent", color: on ? "var(--paper)" : "var(--plum)", fontFamily: "var(--dm)", fontSize: 15, fontWeight: 500 }}>{name}</Link>
+      <Link href={href} style={{ height: 32, padding: "0 16px", borderRadius: 999, display: "grid", placeItems: "center", background: on ? "var(--plum)" : "transparent", color: on ? "var(--paper)" : "var(--plum)", fontFamily: "var(--dm)", ...type("dm", 15), fontWeight: 500 }}>{name}</Link>
     );
   };
   return (
@@ -175,7 +180,7 @@ export function TextField({ x, y, w = 372, value, onChange, placeholder, filled,
       style={{ position: x === undefined ? "relative" : "absolute", left: x, top: y, width: w, height: 56, borderRadius: 999, background: "#fff",
         background: filled ? "#fff6cc" : "#ecebe4", display: "flex", alignItems: "center", gap: 8, padding: "0 8px 0 20px" }}>
       <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
-        style={{ flex: 1, minWidth: 0, fontFamily: "var(--dm)", fontSize: 15, color: "var(--ink-soft)" }} />
+        style={{ flex: 1, minWidth: 0, fontFamily: "var(--dm)", ...type("dm", 15), color: "var(--ink-soft)" }} />
       {(mic || send) && (
         <button type={send ? "submit" : "button"} aria-label={send ? "Send" : "Speak"} className="press"
           style={{ width: 40, height: 40, borderRadius: 999, background: "var(--plum)", color: "var(--paper)", display: "grid", placeItems: "center", flex: "none" }}>
@@ -199,7 +204,7 @@ export function Pill({ ko, en, on, onClick }) {
 export function ChoiceTile({ x, y, label, on, onClick }) {
   return (
     <button onClick={onClick} role="radio" aria-checked={on} className="press" style={{ position: "absolute", left: x, top: y, width: 182, height: 64, borderRadius: 16, padding: "0 16px",
-      background: on ? "var(--plum)" : "#fff", color: on ? "var(--paper)" : "var(--ink-soft)", fontFamily: "var(--dm)", fontSize: 15, display: "flex", alignItems: "center" }}>{label}</button>
+      background: on ? "var(--plum)" : "#fff", color: on ? "var(--paper)" : "var(--ink-soft)", fontFamily: "var(--dm)", ...type("dm", 15), display: "flex", alignItems: "center" }}>{label}</button>
   );
 }
 

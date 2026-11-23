@@ -1,4 +1,5 @@
 "use client";
+import { type } from "@/lib/type";
 import { useState } from "react";
 import { Screen, T, Avatar, ME, WordStack, MenuRow } from "@/components/ui";
 import { Wordmark } from "@/components/Shapes";
@@ -23,7 +24,7 @@ export default function CoffeeOrders() {
       <Avatar x={348} y={90} size={49} src={ME} />
       <T x={26} y={150} font="serif" size={44} lh={44}>coffee order</T>
       <div style={{ position: "absolute", left: 26, top: 199, lineHeight: "30px", whiteSpace: "pre", color: "var(--plum)", fontFamily: "var(--serif)" }}>
-        <span style={{ fontSize: 30 }}>3</span><span style={{ fontSize: 26 }}> </span><span style={{ fontSize: 20 }}>due today</span>
+        <span style={{ ...type("columba", 28) }}>3</span><span style={{ ...type("serif", 20) }}> </span><span style={{ ...type("serif", 20) }}>due today</span>
       </div>
       <WordStack x={24} y={244} card={CARDS[i]} flipped={flipped} onFlip={() => setFlipped((f) => !f)} />
       <T x={24} y={484} font="dm" size={13} lh={17} color="var(--ash)">On the menu · 7 more words</T>

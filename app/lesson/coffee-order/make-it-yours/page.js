@@ -1,4 +1,5 @@
 "use client";
+import { type } from "@/lib/type";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Screen, Box, T, BackLink, Button } from "@/components/ui";
@@ -64,7 +65,7 @@ export default function MakeItYours() {
       <Box x={24} y={233} w={370} h={237} r={20} bg="#ecebe4" />
       <textarea value={order} onChange={(e) => setOrder(e.target.value)} placeholder="what is your go to order?" aria-label="Your go-to order"
         style={{ position: "absolute", left: 24, top: 233, width: 370, height: 237, padding: "24px 24px 24px 31px", background: "transparent", border: 0, resize: "none",
-          fontFamily: "var(--dm), var(--ko)", fontSize: 24, lineHeight: "130%", letterSpacing: "-0.03em", color: "#2a2a28" }} />
+          fontFamily: "var(--dm), var(--ko)", ...type("dm", 22), color: "#2a2a28" }} />
 
       <T x={28} y={487} font="dm" size={15} weight={500} lh={20} color="#a3a3a3">Popular picks:</T>
       <div>
@@ -73,8 +74,8 @@ export default function MakeItYours() {
           return (
             <button key={en} onClick={() => toggle(en)} aria-pressed={on}
               style={{ position: "absolute", left: x, top: y, width: w, height: 43, padding: 0, justifyContent: "center", whiteSpace: "nowrap", borderRadius: 999, background: on ? "#430b27" : "#ecebe4", display: "flex", alignItems: "center", gap: 4, transition: "background .15s" }}>
-              <span style={{ fontFamily: "var(--dm), var(--ko)", fontSize: 15, fontWeight: 500, color: on ? "#fefff8" : "#430b27" }}>{ko}</span>
-              <span style={{ fontFamily: "var(--dm)", fontSize: 15, color: on ? "#fefff8" : "#7e7e7e" }}>{en}</span>
+              <span style={{ fontFamily: "var(--dm), var(--ko)", ...type("dm", 15), fontWeight: 500, color: on ? "#fefff8" : "#430b27" }}>{ko}</span>
+              <span style={{ fontFamily: "var(--dm)", ...type("dm", 15), color: on ? "#fefff8" : "#7e7e7e" }}>{en}</span>
             </button>
           );
         })}

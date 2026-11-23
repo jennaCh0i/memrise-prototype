@@ -1,4 +1,5 @@
 "use client";
+import { type } from "@/lib/type";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Screen, Box, T, Avatar, Chip, P2 } from "@/components/ui";
@@ -135,7 +136,7 @@ export default function SpeakingRoom() {
                 style={{ width: 40, height: 40, borderRadius: 999, display: "grid", placeItems: "center", color: "var(--plum)" }}><Icon name="x" size={20} /></button>
               <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value)}
                 placeholder={typing === "question" ? "Ask the room a question…" : myTurn ? "Type your answer in Korean…" : "Type in Korean…"}
-                style={{ flex: 1, minWidth: 0, fontFamily: "var(--ko)", fontSize: 16, color: "var(--ink-soft)" }} />
+                style={{ flex: 1, minWidth: 0, fontFamily: "var(--ko)", ...type("ko", 17), color: "var(--ink-soft)" }} />
               <button type="submit" aria-label="Send" className="press"
                 style={{ width: 40, height: 40, borderRadius: 999, background: "var(--plum)", color: "var(--paper)", display: "grid", placeItems: "center" }}><Icon name="send" size={18} /></button>
             </form>
@@ -147,7 +148,7 @@ export default function SpeakingRoom() {
               </button>
               <button onClick={() => setTyping("question")} className="press"
                 style={{ position: "absolute", left: 84, top: 28, width: 228, height: 40, borderRadius: 999, background: "#ecebe4",
-                  fontFamily: "var(--dm)", fontSize: 15, color: "var(--charcoal)", display: "flex", alignItems: "center", justifyContent: "center" }}>＋ Ask a question</button>
+                  fontFamily: "var(--dm)", ...type("dm", 15), color: "var(--charcoal)", display: "flex", alignItems: "center", justifyContent: "center" }}>＋ Ask a question</button>
               <button aria-label={listening ? "Stop" : "Speak"} onClick={phase === "room" ? toggleMic : () => setPhase("room")} className={`press${listening ? " pulse" : ""}`}
                 style={{ position: "absolute", left: 324, top: 10, width: 72, height: 72, borderRadius: 999, display: "grid", placeItems: "center",
                   background: listening ? "var(--yellow)" : waiting && phase === "room" ? "var(--plum)" : "var(--charcoal)", color: listening ? "var(--plum)" : "var(--paper)" }}>
@@ -158,17 +159,17 @@ export default function SpeakingRoom() {
         </div>
         {toast && (
           <div className="fade" style={{ position: "absolute", left: 24, right: 24, bottom: 136, height: 44, borderRadius: 999, background: "var(--charcoal)", color: "var(--paper)",
-            display: "grid", placeItems: "center", fontFamily: "var(--dm)", fontSize: 14 }}>{toast}</div>
+            display: "grid", placeItems: "center", fontFamily: "var(--dm)", ...type("dm", 15) }}>{toast}</div>
         )}
       </>
     }>
       {/* header */}
       <Link href="/community"><T x={24} y={71} font="dm" size={15} lh={20} color="var(--paper)">←  back</T></Link>
       <Link href="/community" className="press" style={{ position: "absolute", left: 307, top: 67, width: 96, height: 30, borderRadius: 999, background: "#ef6b4d", color: "var(--paper)",
-        display: "grid", placeItems: "center", fontFamily: "var(--dm)", fontSize: 13 }}>Leave</Link>
+        display: "grid", placeItems: "center", fontFamily: "var(--dm)", ...type("dm", 13) }}>Leave</Link>
       <T x={24} y={126} font="serif" size={28} lh={36} color="var(--paper)">Korean speaking room</T>
       <Chip x={24} y={171} kind="accent" label="All levels" />
-      <Chip x={108} y={171} kind="tag" label="● LIVE · 14 learners" style={{ textTransform: "none", letterSpacing: 0, fontSize: 13, fontWeight: 400, background: "var(--paper)" }} />
+      <Chip x={108} y={171} kind="tag" label="● LIVE · 14 learners" style={{ textTransform: "none", ...type("dm", 13), fontWeight: 400, background: "var(--paper)" }} />
       <Box x={333} y={135} w={68} h={55} r={14} bg="#e1b3e3" />
       <Box x={339} y={135} w={62} h={55} r={14} bg="#b1c2fa" />
       <Avatar x={346} y={135} size={55} src={P2} style={{ borderRadius: 14 }} />
@@ -223,7 +224,7 @@ export default function SpeakingRoom() {
           ) : null}
 
           {!showingLive && current && !current.fix && !current.question && (
-            <Chip x={31} y={622} kind="tag" label="✓  sounds natural" style={{ height: 32, background: "#e8ecfb", textTransform: "none", letterSpacing: 0, fontSize: 13, fontWeight: 500 }} />
+            <Chip x={31} y={622} kind="tag" label="✓  sounds natural" style={{ height: 32, background: "#e8ecfb", textTransform: "none", ...type("dm", 13), fontWeight: 500 }} />
           )}
 
           {/* who's next */}
