@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import Shortcuts from "@/components/Shortcuts";
+import { getSvgPath } from "figma-squircle";
 
 // Every screen is laid out in Figma's 420 × 912 units and zoomed to fit the device.
 // On a phone it fills the screen; on a laptop it shows as a plain 420-wide screen with shortcuts on the left.
@@ -32,7 +33,9 @@ export default function Phone({ children }) {
   return (
     <main className="stage" style={fit.framed ? { background: "#1d1c1b", paddingLeft: 260 } : { background: "#f7f6f2", height: fit.screenH, placeItems: "start center" }}>
       {fit.framed && <Shortcuts />}
-      <div className="phone" style={{ zoom: fit.zoom, height: fit.height }}>
+      {/* Desktop: iOS-style corners — radius 30, 100% corner smoothing */}
+      <div className="phone" style={{ zoom: fit.zoom, height: fit.height,
+        ...(fit.framed ? { clipPath: `path('${getSvgPath({ width: 420, height: fit.height, cornerRadius: 30, cornerSmoothing: 1 })}')` } : {}) }}>
         <Ctx.Provider value={{ height: fit.height }}>{children}</Ctx.Provider>
       </div>
     </main>
