@@ -99,9 +99,6 @@ export function NavNew({ active }) {
   const W = 384, H = 68;
   return (
     <>
-      {/* bottom fade behind the bar (Figma "Rectangle 52") */}
-      <div aria-hidden style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 142, zIndex: 4, pointerEvents: "none",
-        background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, #FEFFF8 71%, #FEFFF8 100%)" }} />
       <nav style={{ position: "absolute", left: 18, bottom: 25, width: W, height: H, zIndex: 5, clipPath: squircle(W, H, 20), borderRadius: 20,
         background: "rgba(243, 244, 239, 0.85)", backdropFilter: "blur(2px) saturate(1.15)", WebkitBackdropFilter: "blur(2px) saturate(1.15)" }}>
         {TABS.map(([name, href, label], i) => {
